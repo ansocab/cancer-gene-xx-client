@@ -1,23 +1,49 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
 
 function App() {
+  const [ensgNumber, setensgNumber] = useState("");
+  const [inputValue, setInputValue] = useState("");
+
+  function getEnsgNumber(name) {
+    fetch(`http://rest.genenames.org/fetch/symbol/${name}`, {
+      headers: { Accept: "application/json" },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.response.docs.length !== 0) {
+          console.log(res.response.docs[0].ensembl_gene_id);
+          setensgNumber(res.response.docs[0].ensembl_gene_id);
+        } else {
+          setensgNumber("nothing found");
+        }
+      });
+  }
+
+  const handleChange = (e) => {
+    setInputValue(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(inputValue);
+    getEnsgNumber(inputValue);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <form onSubmit={handleSubmit} style={{ margin: "60px" }}>
+        <input
+          type="text"
+          placeholder="Gene in any name"
+          onChange={handleChange}
+          value={inputValue}
+        ></input>
+        <button type="submit" style={{ marginLeft: "10px" }}>
+          Submit
+        </button>
+      </form>
+      {ensgNumber}
     </div>
   );
 }
