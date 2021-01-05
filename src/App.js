@@ -4,19 +4,26 @@ import "./App.css";
 function App() {
   const [ensgNumber, setensgNumber] = useState("");
   const [inputValue, setInputValue] = useState("");
+  const [firstSearchResults, setFirstSearchResults] = useState([]);
 
-  function getEnsgNumber(name) {
-    fetch(`http://rest.genenames.org/fetch/symbol/${name}`, {
+  function getHgncId(input) {
+    fetch(`http://rest.genenames.org/search/${input}`, {
       headers: { Accept: "application/json" },
     })
       .then((res) => res.json())
       .then((res) => {
-        if (res.response.docs.length !== 0) {
-          console.log(res.response.docs[0].ensembl_gene_id);
-          setensgNumber(res.response.docs[0].ensembl_gene_id);
-        } else {
-          setensgNumber("nothing found");
-        }
+        setFirstSearchResults(res.response.docs);
+      });
+  }
+
+  function getEnsgNumber(name) {
+    const url = `http://rest.genenames.org/fetch/hgnc_id/${name}`;
+    fetch(url, {
+      headers: { Accept: "application/json" },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setensgNumber(res.response.docs[0].ensembl_gene_id);
       });
   }
 
@@ -27,7 +34,12 @@ function App() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(inputValue);
-    getEnsgNumber(inputValue);
+    getHgncId(inputValue);
+  };
+
+  const handleClick = (e) => {
+    console.log(e.target.value);
+    getEnsgNumber(e.target.value);
   };
 
   return (
@@ -43,6 +55,15 @@ function App() {
           Submit
         </button>
       </form>
+      <ul>
+        {firstSearchResults.map((result) => (
+          <li key={result.hgnc_id}>
+            <button value={result.hgnc_id} onClick={handleClick}>
+              {result.symbol}
+            </button>
+          </li>
+        ))}
+      </ul>
       {ensgNumber}
     </div>
   );
