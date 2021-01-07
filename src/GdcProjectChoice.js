@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import './App.css'
 
-export default function GdcDataChoice() {
+export default function GdcProjectChoice() {
 	const [gdcProjects, setGdcProjects] = useState([])
 
 	function getGdcProjects() {

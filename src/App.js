@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import './App.css'
-import GdcDataChoice from './GdcDataChoice'
+import GdcProjectChoice from './GdcProjectChoice'
+import GdcCategoryChoice from './GdcCategoryChoice'
 
 function App() {
 	const [ensgNumber, setensgNumber] = useState('')
@@ -66,7 +67,8 @@ function App() {
 				))}
 			</ul>
 			{ensgNumber}
-			<GdcDataChoice />
+			<GdcProjectChoice />
+			<GdcCategoryChoice />
 		</div>
 	)
 }
