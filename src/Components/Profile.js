@@ -7,10 +7,16 @@ export default function Profile() {
   const [userData, setUserData] = useState({});
   const history = useHistory();
   //const [passwordDots, setPasswordDots] = useState("");
-
+  console.log("test");
   useEffect(() => {
     const getUser = () => {
-      fetch("http://localhost:4000/profile")
+      fetch("http://localhost:4000/profile", {
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        "Access-Control-Allow-Origin": "http://localhost:4000",
+      })
         .then((res) => res.json())
         .then((res) => console.log(res));
     };
@@ -18,7 +24,13 @@ export default function Profile() {
   }, []);
 
   const logout = () => {
-    fetch("http://localhost:4000/logout")
+    fetch("http://localhost:4000/logout", {
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      "Access-Control-Allow-Origin": "http://localhost:4000",
+    })
       .then((res) => res.json())
       .then((res) => {
         console.log(res);

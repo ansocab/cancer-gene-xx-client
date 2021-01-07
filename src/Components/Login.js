@@ -11,9 +11,11 @@ export default function Login() {
     fetch("http://localhost:4000/login", {
       method: "POST",
       body: JSON.stringify({ email: emailValue, password: passwordValue }),
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
+      "Access-Control-Allow-Origin": "http://localhost:4000",
     })
       .then((res) => res.json())
       .then((res) => {
@@ -37,10 +39,6 @@ export default function Login() {
       setEmailValue(currentValue);
     } else if (e.target.id === "password") {
       setPasswordValue(currentValue);
-      //   const dots = currentValue
-      //     .split("")
-      //     .map((char) => passwordDots.concat("\u2981"));
-      //   setPasswordDots(dots);
     }
   };
 
@@ -66,7 +64,7 @@ export default function Login() {
         <label>
           password
           <input
-            type="text"
+            type="password"
             id="password"
             placeholder={
               "\u2981\u2981\u2981\u2981\u2981\u2981\u2981\u2981\u2981\u2981"
