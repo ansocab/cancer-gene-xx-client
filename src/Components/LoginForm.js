@@ -1,11 +1,13 @@
 import { useRef, useContext } from "react";
 import { useHistory } from "react-router-dom";
+import { setSessionCookie, SessionContext } from "../Helpers/session";
 import { Form, Button } from "react-bootstrap";
 
 export default function LoginForm({ callback }) {
   const history = useHistory();
   const emailValue = useRef();
   const passwordValue = useRef();
+  const { setSession } = useContext(SessionContext);
 
   const login = (mail, pw) => {
     fetch("http://localhost:4000/login", {
@@ -20,19 +22,17 @@ export default function LoginForm({ callback }) {
       .then((res) => res.json())
       .then((res) => {
         console.log(res);
-        handleLogin(res);
+        if (res.success === true) {
+          setSessionCookie(res.user);
+          setSession(res.user);
+          callback("loggedIn");
+          history.push(res.redirectUrl);
+        } else {
+          console.log(res);
+        }
       })
       .catch((err) => console.log(err));
   };
-
-  function handleLogin(res) {
-    if (res.success === true) {
-      callback("loggedIn");
-      history.push(res.redirectUrl);
-    } else {
-      console.log("something went wrong");
-    }
-  }
 
   const handleSubmission = (e) => {
     e.preventDefault();

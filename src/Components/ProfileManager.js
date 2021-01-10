@@ -1,14 +1,15 @@
-import { useState, useEffect, useContext } from "react";
-import { Modal, Button } from "react-bootstrap";
+import { useState, useContext } from "react";
+import { useHistory } from "react-router-dom";
 import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
-import { ProfileContext } from "../ProfileContext";
+import { removeSessionCookie, SessionContext } from "../Helpers/session";
+import { Modal, Button } from "react-bootstrap";
 
 export default function ProfileManager() {
   const [loginModalShow, setLoginModalShow] = useState(false);
   const [registerModalShow, setRegisterModalShow] = useState(false);
-  const [hideButtons, setHideButtons] = useState(false);
-  const { loggedIn } = useContext(ProfileContext);
+  const { session, setSession } = useContext(SessionContext);
+  const history = useHistory();
 
   const handleVisibility = (modal) => {
     if (modal === "registered") {
@@ -16,30 +17,60 @@ export default function ProfileManager() {
     } else {
       setLoginModalShow(false);
     }
-    setHideButtons(true);
   };
 
-  console.log(loggedIn);
+  const handleLogout = () => {
+    fetch("http://localhost:4000/logout", {
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      "Access-Control-Allow-Origin": "http://localhost:4000",
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        if (res.success === true) {
+          removeSessionCookie();
+          setSession({});
+          history.push(res.redirectUrl);
+        } else {
+          console.log(res);
+        }
+      })
+      .catch((err) => console.log(err));
+  };
 
   return (
     <>
-      <Button
-        className={`mt-5 mr-3 ${hideButtons && "d-none"}`}
-        variant="primary"
-        onClick={() => setLoginModalShow(true)}
-        //show={buttonsShow}
-      >
-        Login
-      </Button>
+      <div className="text-right mr-5">
+        {Object.keys(session).length === 0 ? (
+          <>
+            <Button
+              className="mt-5 mr-3"
+              variant="primary"
+              onClick={() => setLoginModalShow(true)}
+            >
+              Login
+            </Button>
 
-      <Button
-        className={`mt-5 ${hideButtons && "d-none"}`}
-        variant="primary"
-        onClick={() => setRegisterModalShow(true)}
-        //show={buttonsShow}
-      >
-        Register
-      </Button>
+            <Button
+              className="mt-5"
+              variant="primary"
+              onClick={() => setRegisterModalShow(true)}
+            >
+              Register
+            </Button>
+          </>
+        ) : (
+          <>
+            <p className="mt-5">{`Logged in as ${session.name}`}</p>
+            <Button variant="primary" onClick={handleLogout}>
+              Logout
+            </Button>
+          </>
+        )}
+      </div>
 
       <Modal
         aria-labelledby="contained-modal-title-vcenter"
@@ -71,13 +102,5 @@ export default function ProfileManager() {
         </Modal.Body>
       </Modal>
     </>
-    // <div>
-    //   <button variant="primary" onClick={showLogin}>
-    //     Login
-    //   </button>
-    //   <button variant="primary" onClick={showRegister}>
-    //     Register
-    //   </button>
-    // </div>
   );
 }

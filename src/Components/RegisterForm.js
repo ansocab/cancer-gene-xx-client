@@ -1,8 +1,10 @@
-import { useRef } from "react";
+import { useContext, useRef } from "react";
 import { useHistory } from "react-router-dom";
+import { setSessionCookie, SessionContext } from "../Helpers/session";
 import { Form, Button } from "react-bootstrap";
 
 export default function RegisterForm({ callback }) {
+  const { setSession } = useContext(SessionContext);
   const history = useHistory();
   const nameValue = useRef();
   const emailValue = useRef();
@@ -21,19 +23,17 @@ export default function RegisterForm({ callback }) {
       .then((res) => res.json())
       .then((res) => {
         console.log(res);
-        handleRedirect(res);
+        if (res.success === true) {
+          setSessionCookie(res.user);
+          setSession(res.user);
+          callback("registered");
+          history.push(res.redirectUrl);
+        } else {
+          console.log(res);
+        }
       })
       .catch((err) => console.log(err));
   };
-
-  function handleRedirect(res) {
-    if (res.success === true) {
-      callback("registered");
-      history.push(res.redirectUrl);
-    } else {
-      console.log("something went wrong");
-    }
-  }
 
   const handleSubmission = (e) => {
     e.preventDefault();
@@ -43,7 +43,6 @@ export default function RegisterForm({ callback }) {
       password: passwordValue.current.value,
     };
 
-    console.log(registerData);
     register(registerData);
   };
 
