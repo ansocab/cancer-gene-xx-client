@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react'
+import DataFetch from './DataFetch'
+import { Form } from 'react-bootstrap'
 import '../App.css'
 
 export default function GdcWorkflowChoice(props) {
-	console.log(props.dataType, props.category)
 	const [gdcWorkflows, setGdcWorkflows] = useState([])
 	const [uniqueWorkflow, setUniqueWorkflow] = useState([])
+	const [selectedWorkflow, setSelectedWorkflow] = useState([])
+	const [startDataFetch, setStartDataFetch] = useState(false)
 
 	function getGdcWorkflows() {
 		fetch('https://api.gdc.cancer.gov/v0/graphql', {
@@ -19,7 +22,7 @@ export default function GdcWorkflowChoice(props) {
                     viewer {
                         repository {
                     files {
-                          hits(first: 10, filters: $filters) {
+                          hits(first: 1000, filters: $filters) {
                             edges {
                               node {
                                file_id
@@ -42,7 +45,7 @@ export default function GdcWorkflowChoice(props) {
 								op: 'in',
 								content: {
 									field: 'cases.project.project_id',
-									value: ['TCGA-LIHC'],
+									value: props.project,
 								},
 							},
 							{
@@ -86,17 +89,53 @@ export default function GdcWorkflowChoice(props) {
 		setUniqueWorkflow(Array.from(helperSet))
 	}
 
-	if (uniqueWorkflow) {
-		return (
-			<>
-				<ul>
-					{uniqueWorkflow.map((type) => (
-						<li key={type}>{type}</li>
-					))}
-				</ul>
-			</>
-		)
-	} else {
-		return <h1>loading available GDC projects...</h1>
+	const handleChange = (e) => {
+		const selection = e.target.name
+		let previousSelection = selectedWorkflow
+
+		if (e.target.checked) {
+			previousSelection.push(selection)
+		} else {
+			const index = selectedWorkflow.indexOf(selection)
+			previousSelection.splice(index, 1)
+		}
+		setSelectedWorkflow(previousSelection)
+		setStartDataFetch(true)
+		console.log(selectedWorkflow)
 	}
+
+	return (
+		<>
+			<div>
+				{uniqueWorkflow ? (
+					<Form>
+						{uniqueWorkflow.map((workflow) => (
+							<Form.Group controlId='formBasicCheckbox'>
+								<Form.Check
+									type='checkbox'
+									name={workflow}
+									label={workflow}
+									onChange={handleChange}
+								/>
+							</Form.Group>
+						))}
+					</Form>
+				) : (
+					<h1>loading available GDC workflows...</h1>
+				)}
+			</div>
+			<div>
+				{startDataFetch && (
+					<>
+						<DataFetch
+							dataType={props.dataType}
+							workflow={selectedWorkflow}
+							category={props.category}
+							project={props.project}
+						/>
+					</>
+				)}
+			</div>
+		</>
+	)
 }
