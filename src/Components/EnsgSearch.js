@@ -41,36 +41,42 @@ export default function EnsgSearch() {
   };
 
   const handleClick = (e) => {
-    console.log(e.target.value);
-    getEnsgNumber(e.target.value);
+    console.log(e.target.getAttribute("value"));
+    getEnsgNumber(e.target.getAttribute("value"));
   };
 
   return (
-    <>
+    <div className="ensg-search-container">
       <form onSubmit={handleSubmit} style={{ margin: "60px" }}>
         <input
           type="text"
+          class="form-control"
+          id="inputDefault"
           placeholder="Gene in any name"
           onChange={handleChange}
           value={inputValue}
         ></input>
-        <Button variant="primary" type="submit" style={{ marginLeft: "10px" }}>
-          Submit
+        <Button
+          className="mt-3"
+          variant="primary"
+          type="submit"
+          style={{ marginLeft: "10px" }}
+        >
+          Search
         </Button>
       </form>
-      <ul>
+      <ul class="list-group">
         {firstSearchResults.map((result) => (
-          <li key={result.hgnc_id}>
-            <Button
-              variant="primary"
-              value={result.hgnc_id}
-              onClick={handleClick}
-            >
-              {result.symbol}
-            </Button>
+          <li
+            class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+            key={result.hgnc_id}
+            value={result.hgnc_id}
+            onClick={handleClick}
+          >
+            {result.symbol}
           </li>
         ))}
       </ul>
-    </>
+    </div>
   );
 }
