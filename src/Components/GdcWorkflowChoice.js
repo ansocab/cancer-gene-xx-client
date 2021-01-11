@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import '../App.css'
 
-export default function GdcWorkflowChoice() {
+export default function GdcWorkflowChoice(props) {
+	console.log(props.dataType, props.category)
 	const [gdcWorkflows, setGdcWorkflows] = useState([])
 	const [uniqueWorkflow, setUniqueWorkflow] = useState([])
 
@@ -48,14 +49,14 @@ export default function GdcWorkflowChoice() {
 								op: 'in',
 								content: {
 									field: 'data_category',
-									value: ['Transcriptome Profiling'],
+									value: [props.category],
 								},
 							},
 							{
 								op: 'in',
 								content: {
 									field: 'data_type',
-									value: ['Gene Expression Quantification'],
+									value: [props.dataType],
 								},
 							},
 						],
@@ -71,7 +72,7 @@ export default function GdcWorkflowChoice() {
 
 	useEffect(() => {
 		getGdcWorkflows()
-	}, [])
+	}, [props.dataType])
 
 	useEffect(() => {
 		showWorkflows()
@@ -85,7 +86,7 @@ export default function GdcWorkflowChoice() {
 		setUniqueWorkflow(Array.from(helperSet))
 	}
 
-	if (gdcWorkflows) {
+	if (uniqueWorkflow) {
 		return (
 			<>
 				<ul>

@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react'
+import GdcDataTypeChoice from './GdcDataTypeChoice'
 import '../App.css'
 
 export default function GdcCategoryChoice() {
 	const [gdcCategories, setGdcCategories] = useState([])
 	const [uniqueCategories, setUniqueCategories] = useState([])
+	const [selectedCategory, setSelectedCategory] = useState([])
 
 	function getGdcCategories() {
 		fetch('https://api.gdc.cancer.gov/v0/graphql', {
@@ -65,17 +67,29 @@ export default function GdcCategoryChoice() {
 		setUniqueCategories(Array.from(helperSet))
 	}
 
-	if (uniqueCategories) {
-		return (
-			<>
-				<ul>
-					{uniqueCategories.map((category) => (
-						<li key={category}>{category}</li>
-					))}
-				</ul>
-			</>
-		)
-	} else {
-		return <h1>loading available GDC projects...</h1>
+	const handleClick = (e) => {
+		setSelectedCategory(e.target.value)
+		console.log(selectedCategory)
 	}
+
+	return (
+		<>
+			<div>
+				{uniqueCategories ? (
+					uniqueCategories.map((category) => (
+						<button value={category} onClick={handleClick}>
+							{category}
+						</button>
+					))
+				) : (
+					<h1>loading available GDC projects...</h1>
+				)}
+			</div>
+			<div>
+				{selectedCategory.length > 0 && (
+					<GdcDataTypeChoice category={selectedCategory} />
+				)}
+			</div>
+		</>
+	)
 }

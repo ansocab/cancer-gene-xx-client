@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react'
+import GdcWorkflowChoice from './GdcWorkflowChoice'
 import '../App.css'
 
-export default function GdcDataTypeChoice() {
+export default function GdcDataTypeChoice(props) {
 	const [gdcDataTypes, setGdcDataTypes] = useState([])
 	const [uniqueDataType, setUniqueDataType] = useState([])
+	const [selectedType, setSelectedType] = useState([])
 
 	function getGdcDataTypes() {
 		fetch('https://api.gdc.cancer.gov/v0/graphql', {
@@ -45,7 +47,7 @@ export default function GdcDataTypeChoice() {
 								op: 'in',
 								content: {
 									field: 'data_category',
-									value: ['Transcriptome Profiling'],
+									value: [props.category],
 								},
 							},
 						],
@@ -61,7 +63,7 @@ export default function GdcDataTypeChoice() {
 
 	useEffect(() => {
 		getGdcDataTypes()
-	}, [])
+	}, [props.category])
 
 	useEffect(() => {
 		showDataTypes()
@@ -74,17 +76,32 @@ export default function GdcDataTypeChoice() {
 		setUniqueDataType(Array.from(helperSet))
 	}
 
-	if (gdcDataTypes) {
-		return (
-			<>
-				<ul>
-					{uniqueDataType.map((type) => (
-						<li key={type}>{type}</li>
-					))}
-				</ul>
-			</>
-		)
-	} else {
-		return <h1>loading available GDC projects...</h1>
+	const handleClick = (e) => {
+		setSelectedType(e.target.value)
+		console.log(selectedType)
 	}
+
+	return (
+		<>
+			<div>
+				{uniqueDataType ? (
+					uniqueDataType.map((type) => (
+						<button value={type} onClick={handleClick}>
+							{type}
+						</button>
+					))
+				) : (
+					<h1>loading available GDC projects...</h1>
+				)}
+			</div>
+			<div>
+				{selectedType.length > 0 && (
+					<GdcWorkflowChoice
+						dataType={selectedType}
+						category={props.category}
+					/>
+				)}
+			</div>
+		</>
+	)
 }
