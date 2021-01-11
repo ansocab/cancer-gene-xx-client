@@ -2,7 +2,6 @@ import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 import EnsgSearch from './Components/EnsgSearch'
 import GdcProjectChoice from './Components/GdcProjectChoice'
-import GdcCategoryChoice from './Components/GdcCategoryChoice'
 
 import Profile from './Components/Profile'
 import 'bootswatch/dist/flatly/bootstrap.min.css'
@@ -22,7 +21,6 @@ function App() {
 				</Route>
 				<Route path='/:ensgNumber'>
 					<GdcProjectChoice />
-					<GdcCategoryChoice />
 				</Route>
 			</Switch>
 		</div>

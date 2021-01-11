@@ -49,14 +49,14 @@ export default function GdcWorkflowChoice(props) {
 								op: 'in',
 								content: {
 									field: 'data_category',
-									value: [props.category],
+									value: props.category,
 								},
 							},
 							{
 								op: 'in',
 								content: {
 									field: 'data_type',
-									value: [props.dataType],
+									value: props.dataType,
 								},
 							},
 						],

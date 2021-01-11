@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import GdcWorkflowChoice from './GdcWorkflowChoice'
+import { Form } from 'react-bootstrap'
 import '../App.css'
 
 export default function GdcDataTypeChoice(props) {
+	console.log(props.category)
 	const [gdcDataTypes, setGdcDataTypes] = useState([])
 	const [uniqueDataType, setUniqueDataType] = useState([])
 	const [selectedType, setSelectedType] = useState([])
+	const [showWorkflow, setShowWorkflow] = useState(false)
 
 	function getGdcDataTypes() {
 		fetch('https://api.gdc.cancer.gov/v0/graphql', {
@@ -47,7 +50,7 @@ export default function GdcDataTypeChoice(props) {
 								op: 'in',
 								content: {
 									field: 'data_category',
-									value: [props.category],
+									value: props.category,
 								},
 							},
 						],
@@ -81,25 +84,50 @@ export default function GdcDataTypeChoice(props) {
 		console.log(selectedType)
 	}
 
+	const handleChange = (e) => {
+		const selection = e.target.name
+		let previousSelection = selectedType
+
+		if (e.target.checked) {
+			previousSelection.push(selection)
+		} else {
+			const index = selectedType.indexOf(selection)
+			previousSelection.splice(index, 1)
+		}
+		setSelectedType(previousSelection)
+		setShowWorkflow(true)
+		console.log(selectedType)
+		console.log(showWorkflow)
+	}
+
 	return (
 		<>
 			<div>
 				{uniqueDataType ? (
-					uniqueDataType.map((type) => (
-						<button value={type} onClick={handleClick}>
-							{type}
-						</button>
-					))
+					<Form>
+						{uniqueDataType.map((type) => (
+							<Form.Group controlId='formBasicCheckbox'>
+								<Form.Check
+									type='checkbox'
+									name={type}
+									label={type}
+									onChange={handleChange}
+								/>
+							</Form.Group>
+						))}
+					</Form>
 				) : (
 					<h1>loading available GDC projects...</h1>
 				)}
 			</div>
 			<div>
-				{selectedType.length > 0 && (
-					<GdcWorkflowChoice
-						dataType={selectedType}
-						category={props.category}
-					/>
+				{showWorkflow && (
+					<>
+						<GdcWorkflowChoice
+							dataType={selectedType}
+							category={props.category}
+						/>
+					</>
 				)}
 			</div>
 		</>
