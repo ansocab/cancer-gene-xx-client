@@ -4,7 +4,6 @@ import { Form } from 'react-bootstrap'
 import '../App.css'
 
 export default function GdcDataTypeChoice(props) {
-	console.log(props.category)
 	const [gdcDataTypes, setGdcDataTypes] = useState([])
 	const [uniqueDataType, setUniqueDataType] = useState([])
 	const [selectedType, setSelectedType] = useState([])
@@ -23,7 +22,7 @@ export default function GdcDataTypeChoice(props) {
                     viewer {
                         repository {
                     files {
-                          hits(first: 10, filters: $filters) {
+                          hits(first: 1000, filters: $filters) {
                             edges {
                               node {
                                file_id
@@ -43,7 +42,7 @@ export default function GdcDataTypeChoice(props) {
 								op: 'in',
 								content: {
 									field: 'cases.project.project_id',
-									value: ['TCGA-LIHC'],
+									value: props.project,
 								},
 							},
 							{
@@ -79,11 +78,6 @@ export default function GdcDataTypeChoice(props) {
 		setUniqueDataType(Array.from(helperSet))
 	}
 
-	const handleClick = (e) => {
-		setSelectedType(e.target.value)
-		console.log(selectedType)
-	}
-
 	const handleChange = (e) => {
 		const selection = e.target.name
 		let previousSelection = selectedType
@@ -97,7 +91,6 @@ export default function GdcDataTypeChoice(props) {
 		setSelectedType(previousSelection)
 		setShowWorkflow(true)
 		console.log(selectedType)
-		console.log(showWorkflow)
 	}
 
 	return (
@@ -117,7 +110,7 @@ export default function GdcDataTypeChoice(props) {
 						))}
 					</Form>
 				) : (
-					<h1>loading available GDC projects...</h1>
+					<h1>loading available GDC data types...</h1>
 				)}
 			</div>
 			<div>
@@ -126,6 +119,7 @@ export default function GdcDataTypeChoice(props) {
 						<GdcWorkflowChoice
 							dataType={selectedType}
 							category={props.category}
+							project={props.project}
 						/>
 					</>
 				)}

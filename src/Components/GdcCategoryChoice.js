@@ -20,7 +20,7 @@ export default function GdcCategoryChoice(props) {
 				query: `
                 query DataCategoryFileCounts($filters: FiltersArgument) {
                         projects {
-                          hits(first: 10, filters: $filters) {
+                          hits(first: 1000, filters: $filters) {
                             edges {
                               node {
                                project_id
@@ -82,7 +82,6 @@ export default function GdcCategoryChoice(props) {
 		setSelectedCategory(previousSelection)
 		setShowDataType(true)
 		console.log(selectedCategory)
-		console.log(showDataType)
 	}
 
 	return (
@@ -102,13 +101,16 @@ export default function GdcCategoryChoice(props) {
 						))}
 					</Form>
 				) : (
-					<h1>loading available GDC projects...</h1>
+					<h1>loading available GDC data categories...</h1>
 				)}
 			</div>
 			<div>
 				{showDataType && (
 					<>
-						<GdcDataTypeChoice category={selectedCategory} />
+						<GdcDataTypeChoice
+							category={selectedCategory}
+							project={props.project}
+						/>
 					</>
 				)}
 			</div>

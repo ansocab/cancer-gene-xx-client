@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import GdcCategoryChoice from './GdcCategoryChoice'
-import { Form, Button } from 'react-bootstrap'
+import { Form } from 'react-bootstrap'
 import '../App.css'
 
 export default function GdcProjectChoice() {
