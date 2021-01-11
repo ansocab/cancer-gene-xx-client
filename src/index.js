@@ -5,12 +5,15 @@ import "bootswatch/dist/flatly/bootstrap.min.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
+import { SessionProvider } from "./Helpers/session.js";
 
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <SessionProvider>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </SessionProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

@@ -1,30 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Switch, Route } from "react-router-dom";
 import EnsgSearch from "./Components/EnsgSearch";
 import GdcProjectChoice from "./Components/GdcProjectChoice";
 import GdcCategoryChoice from "./Components/GdcCategoryChoice";
-import Login from "./Components/Login";
 import Profile from "./Components/Profile";
 import "bootswatch/dist/flatly/bootstrap.min.css";
 import "./App.css";
+import ProfileManager from "./Components/ProfileManager";
 
 function App() {
-  useEffect(() => {
-    fetch("http://localhost:4000", {
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      "Access-Control-Allow-Origin": "http://localhost:4000",
-    })
-      .then((res) => res.json())
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
-  }, []);
-
   return (
     <div className="App">
-      <Login />
+      <ProfileManager />
       <Switch>
         <Route exact path="/">
           <EnsgSearch />
