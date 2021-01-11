@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react'
+import { Form } from 'react-bootstrap'
+import GdcDataTypeChoice from './GdcDataTypeChoice'
 import '../App.css'
 
-export default function GdcCategoryChoice() {
+export default function GdcCategoryChoice(props) {
 	const [gdcCategories, setGdcCategories] = useState([])
 	const [uniqueCategories, setUniqueCategories] = useState([])
+	const [selectedCategory, setSelectedCategory] = useState([])
+	const [showDataType, setShowDataType] = useState(false)
 
 	function getGdcCategories() {
 		fetch('https://api.gdc.cancer.gov/v0/graphql', {
@@ -35,7 +39,7 @@ export default function GdcCategoryChoice() {
 				variables: {
 					filters: {
 						op: '=',
-						content: { field: 'project_id', value: ['TCGA*'] },
+						content: { field: 'project_id', value: props.project },
 					},
 				},
 			}),
@@ -65,17 +69,49 @@ export default function GdcCategoryChoice() {
 		setUniqueCategories(Array.from(helperSet))
 	}
 
-	if (uniqueCategories) {
-		return (
-			<>
-				<ul>
-					{uniqueCategories.map((category) => (
-						<li key={category}>{category}</li>
-					))}
-				</ul>
-			</>
-		)
-	} else {
-		return <h1>loading available GDC projects...</h1>
+	const handleChange = (e) => {
+		const selection = e.target.name
+		let previousSelection = selectedCategory
+
+		if (e.target.checked) {
+			previousSelection.push(selection)
+		} else {
+			const index = selectedCategory.indexOf(selection)
+			previousSelection.splice(index, 1)
+		}
+		setSelectedCategory(previousSelection)
+		setShowDataType(true)
+		console.log(selectedCategory)
+		console.log(showDataType)
 	}
+
+	return (
+		<>
+			<div>
+				{uniqueCategories ? (
+					<Form>
+						{uniqueCategories.map((category) => (
+							<Form.Group controlId='formBasicCheckbox'>
+								<Form.Check
+									type='checkbox'
+									name={category}
+									label={category}
+									onChange={handleChange}
+								/>
+							</Form.Group>
+						))}
+					</Form>
+				) : (
+					<h1>loading available GDC projects...</h1>
+				)}
+			</div>
+			<div>
+				{showDataType && (
+					<>
+						<GdcDataTypeChoice category={selectedCategory} />
+					</>
+				)}
+			</div>
+		</>
+	)
 }
