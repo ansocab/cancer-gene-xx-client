@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import '../App.css'
 
-export default function GdcDataTypeChoice() {
-	const [gdcDataTypes, setGdcDataTypes] = useState([])
-	const [uniqueDataType, setUniqueDataType] = useState([])
+export default function GdcWorkflowChoice() {
+	const [gdcWorkflows, setGdcWorkflows] = useState([])
+	const [uniqueWorkflow, setUniqueWorkflow] = useState([])
 
-	function getGdcDataTypes() {
+	function getGdcWorkflows() {
 		fetch('https://api.gdc.cancer.gov/v0/graphql', {
 			method: 'POST',
 			headers: {
@@ -14,7 +14,7 @@ export default function GdcDataTypeChoice() {
 			},
 			body: JSON.stringify({
 				query: `
-                query DataTypeFileCounts($filters: FiltersArgument) {
+                query WorkflowFileCounts($filters: FiltersArgument) {
                     viewer {
                         repository {
                     files {
@@ -24,6 +24,9 @@ export default function GdcDataTypeChoice() {
                                file_id
                                data_category
                             data_type
+                            analysis{
+                                workflow_type
+                            }
                             
                             }
                         }
@@ -48,6 +51,13 @@ export default function GdcDataTypeChoice() {
 									value: ['Transcriptome Profiling'],
 								},
 							},
+							{
+								op: 'in',
+								content: {
+									field: 'data_type',
+									value: ['Gene Expression Quantification'],
+								},
+							},
 						],
 					},
 				},
@@ -55,30 +65,31 @@ export default function GdcDataTypeChoice() {
 		})
 			.then((res) => res.json())
 			.then((res) => {
-				setGdcDataTypes(res.data.viewer.repository.files.hits.edges)
+				setGdcWorkflows(res.data.viewer.repository.files.hits.edges)
 			})
 	}
 
 	useEffect(() => {
-		getGdcDataTypes()
+		getGdcWorkflows()
 	}, [])
 
 	useEffect(() => {
-		showDataTypes()
-	}, [gdcDataTypes])
+		showWorkflows()
+	}, [gdcWorkflows])
 
-	function showDataTypes() {
+	function showWorkflows() {
 		let helperSet = new Set()
-		gdcDataTypes.map((dataType) => helperSet.add(dataType.node.data_type))
-
-		setUniqueDataType(Array.from(helperSet))
+		gdcWorkflows.map((workflow) =>
+			helperSet.add(workflow.node.analysis.workflow_type)
+		)
+		setUniqueWorkflow(Array.from(helperSet))
 	}
 
-	if (gdcDataTypes) {
+	if (gdcWorkflows) {
 		return (
 			<>
 				<ul>
-					{uniqueDataType.map((type) => (
+					{uniqueWorkflow.map((type) => (
 						<li key={type}>{type}</li>
 					))}
 				</ul>

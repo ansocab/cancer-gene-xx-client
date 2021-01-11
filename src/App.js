@@ -4,6 +4,7 @@ import EnsgSearch from './Components/EnsgSearch'
 import GdcProjectChoice from './Components/GdcProjectChoice'
 import GdcCategoryChoice from './Components/GdcCategoryChoice'
 import GdcDataTypeChoice from './Components/GdcDataTypeChoice'
+import GdcWorkflowChoice from './Components/GdcWorkflowChoice'
 import Profile from './Components/Profile'
 import 'bootswatch/dist/flatly/bootstrap.min.css'
 import './App.css'
@@ -24,6 +25,7 @@ function App() {
 					<GdcProjectChoice />
 					<GdcCategoryChoice />
 					<GdcDataTypeChoice />
+					<GdcWorkflowChoice />
 				</Route>
 			</Switch>
 		</div>
