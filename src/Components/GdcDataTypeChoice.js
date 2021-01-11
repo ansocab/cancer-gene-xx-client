@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import GdcWorkflowChoice from "./GdcWorkflowChoice";
 import { Form, Col } from "react-bootstrap";
 import "../App.css";
@@ -59,7 +59,6 @@ export default function GdcDataTypeChoice(props) {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
         setGdcDataTypes(res.data.viewer.repository.files.hits.edges);
       });
   }
