@@ -1,22 +1,22 @@
-import React, { useState, useEffect } from 'react'
-import GdcCategoryChoice from './GdcCategoryChoice'
-import { Form } from 'react-bootstrap'
-import '../App.css'
+import React, { useState, useEffect } from "react";
+import GdcCategoryChoice from "./GdcCategoryChoice";
+import { Row, Col } from "react-bootstrap";
+import "../App.css";
 
 export default function GdcProjectChoice() {
-	const [gdcProjects, setGdcProjects] = useState([])
-	const [selectedProjects, setSelectedProjects] = useState([])
-	const [showCategory, setShowCategory] = useState(false)
+  const [gdcProjects, setGdcProjects] = useState([]);
+  const [selectedProjects, setSelectedProjects] = useState([]);
+  const [showCategory, setShowCategory] = useState(false);
 
-	function getGdcProjects() {
-		fetch('https://api.gdc.cancer.gov/v0/graphql', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				Accept: 'application/json',
-			},
-			body: JSON.stringify({
-				query: `
+  function getGdcProjects() {
+    fetch("https://api.gdc.cancer.gov/v0/graphql", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        query: `
 			  
 			  query PROJECTS_EDGES($filters_1: FiltersArgument) {
 				projects {
@@ -33,64 +33,79 @@ export default function GdcProjectChoice() {
 				}
 			  }
 			`,
-				variables: {
-					filters_1: {
-						op: '=',
-						content: { field: 'project_id', value: ['TCGA*'] },
-					},
-				},
-			}),
-		})
-			.then((res) => res.json())
-			.then((res) => setGdcProjects(res.data.projects.hits.edges))
-	}
+        variables: {
+          filters_1: {
+            op: "=",
+            content: { field: "project_id", value: ["TCGA*"] },
+          },
+        },
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => setGdcProjects(res.data.projects.hits.edges));
+  }
 
-	useEffect(() => {
-		getGdcProjects()
-	}, [])
+  useEffect(() => {
+    getGdcProjects();
+  }, []);
 
-	const handleChange = (e) => {
-		const selection = e.target.name
-		let previousSelection = selectedProjects
+  const handleChange = (e) => {
+    const selection = e.target.id;
+    let previousSelection = selectedProjects;
 
-		if (e.target.checked) {
-			previousSelection.push(selection)
-		} else {
-			const index = selectedProjects.indexOf(selection)
-			previousSelection.splice(index, 1)
-		}
-		setSelectedProjects(previousSelection)
-		setShowCategory(true)
-		console.log(selectedProjects)
-	}
+    if (e.target.checked) {
+      previousSelection.push(selection);
+    } else {
+      const index = selectedProjects.indexOf(selection);
+      previousSelection.splice(index, 1);
+    }
+    setSelectedProjects(previousSelection);
 
-	return (
-		<>
-			<div>
-				{gdcProjects ? (
-					<Form>
-						{gdcProjects.map((project) => (
-							<Form.Group controlId='formBasicCheckbox'>
-								<Form.Check
-									type='checkbox'
-									name={project.node.project_id}
-									label={project.node.name}
-									onChange={handleChange}
-								/>
-							</Form.Group>
-						))}
-					</Form>
-				) : (
-					<h1>loading available GDC projects...</h1>
-				)}
-			</div>
-			<div>
-				{showCategory && (
-					<>
-						<GdcCategoryChoice project={selectedProjects} />
-					</>
-				)}
-			</div>
-		</>
-	)
+    if (previousSelection.length !== 0) {
+      setShowCategory(true);
+    } else {
+      setShowCategory(false);
+    }
+
+    console.log(selectedProjects);
+  };
+
+  return (
+    <Row className="justify-content-start">
+      <Col md="6" xl="3">
+        <h3>Projects</h3>
+        {gdcProjects ? (
+          <fieldset className="projects-container">
+            <div className="form-group">
+              {gdcProjects.map((project) => (
+                <div className="custom-control custom-checkbox">
+                  <input
+                    type="checkbox"
+                    className="custom-control-input"
+                    id={project.node.project_id}
+                    onChange={handleChange}
+                  />
+                  <label
+                    className="custom-control-label"
+                    for={project.node.project_id}
+                  >
+                    {project.node.name}
+                  </label>
+                </div>
+              ))}
+            </div>
+          </fieldset>
+        ) : (
+          <h1>loading available GDC projects...</h1>
+        )}
+      </Col>
+      <>
+        {showCategory && (
+          <>
+            <GdcCategoryChoice project={selectedProjects} />
+          </>
+        )}
+      </>
+    </Row>
+  );
 }
