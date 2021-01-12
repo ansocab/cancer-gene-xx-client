@@ -79,13 +79,10 @@ export default function GdcDataTypeChoice(props) {
   }
 
   const handleChange = (e) => {
-    const selection = e.target.id;
-
     if (e.target.checked) {
-      setSelectedType([...selectedType, selection]);
+      setSelectedType([...selectedType, e.target.id]);
     } else {
-      const index = selectedType.indexOf(selection);
-      setSelectedType((prev) => prev.slice(index, 1));
+      setSelectedType((prev) => prev.filter((item) => item !== e.target.id));
     }
   };
 
@@ -95,7 +92,6 @@ export default function GdcDataTypeChoice(props) {
     } else {
       setShowWorkflow(false);
     }
-    console.log(selectedType);
   }, [selectedType]);
 
   return (
@@ -106,7 +102,7 @@ export default function GdcDataTypeChoice(props) {
           <fieldset>
             <div className="form-group">
               {uniqueDataType.map((type) => (
-                <div className="custom-control custom-checkbox">
+                <div key={type} className="custom-control custom-checkbox">
                   <input
                     type="checkbox"
                     className="custom-control-input"

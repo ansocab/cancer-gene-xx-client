@@ -78,7 +78,10 @@ export default function GdcProjectChoice() {
           <fieldset className="projects-container">
             <div className="form-group">
               {gdcProjects.map((project) => (
-                <div className="custom-control custom-checkbox">
+                <div
+                  key={project.node.project_id}
+                  className="custom-control custom-checkbox"
+                >
                   <input
                     type="checkbox"
                     className="custom-control-input"
