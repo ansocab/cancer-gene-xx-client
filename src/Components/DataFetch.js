@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react'
+import DataDownload from './DataDownload'
 import { Form } from 'react-bootstrap'
 import '../App.css'
 
 export default function DataFetch(props) {
 	console.log(props)
 	const [dataFetchManifest, setDataFetchManifest] = useState([])
+	const [idArray, setIdArray] = useState([])
 
 	function getDataFetchManifest() {
 		fetch('https://api.gdc.cancer.gov/v0/graphql', {
@@ -19,7 +21,7 @@ export default function DataFetch(props) {
                     viewer {
                         repository {
                     files {
-                          hits(first: 1000, filters: $filters) {
+                          hits(first: 10, filters: $filters) {
                             edges {
                               node {
                                file_id    
@@ -75,19 +77,24 @@ export default function DataFetch(props) {
 		getDataFetchManifest()
 	}, [props.workflow])
 
+	useEffect(() => {
+		buildIdArray()
+	}, [dataFetchManifest])
+
+	function buildIdArray() {
+		let helperArray = []
+		dataFetchManifest.map((manifest) => helperArray.push(manifest.node.file_id))
+		setIdArray(helperArray)
+	}
+
 	return (
 		<>
-			<div>
-				{dataFetchManifest ? (
-					<ol>
-						{dataFetchManifest.map((manifest) => (
-							<li>{manifest.node.file_id}</li>
-						))}
-					</ol>
-				) : (
-					<h1>loading available GDC workflows...</h1>
-				)}
-			</div>
+			{idArray.length && (
+				<>
+					<p>{idArray}</p>
+					<DataDownload idArray={idArray} />
+				</>
+			)}
 		</>
 	)
 }
