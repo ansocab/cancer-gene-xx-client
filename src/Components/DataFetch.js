@@ -89,7 +89,7 @@ export default function DataFetch(props) {
 
 	return (
 		<>
-			{idArray && (
+			{idArray.length && (
 				<>
 					<p>{idArray}</p>
 					<DataDownload idArray={idArray} />
