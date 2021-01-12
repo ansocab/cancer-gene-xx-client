@@ -90,13 +90,12 @@ export default function GdcWorkflowChoice(props) {
   }
 
   const handleChange = (e) => {
-    const selection = e.target.id;
-
     if (e.target.checked) {
-      setSelectedWorkflow([...selectedWorkflow, selection]);
+      setSelectedWorkflow([...selectedWorkflow, e.target.id]);
     } else {
-      const index = selectedWorkflow.indexOf(selection);
-      setSelectedWorkflow((prev) => prev.slice(index, 1));
+      setSelectedWorkflow((prev) =>
+        prev.filter((item) => item !== e.target.id)
+      );
     }
   };
 
@@ -116,19 +115,24 @@ export default function GdcWorkflowChoice(props) {
         {uniqueWorkflow ? (
           <fieldset>
             <div className="form-group">
-              {uniqueWorkflow.map((workflow) => (
-                <div className="custom-control custom-checkbox">
-                  <input
-                    type="checkbox"
-                    className="custom-control-input"
-                    id={workflow}
-                    onChange={handleChange}
-                  />
-                  <label className="custom-control-label" for={workflow}>
-                    {workflow}
-                  </label>
-                </div>
-              ))}
+              {uniqueWorkflow
+                .filter((item) => item && item.length)
+                .map((workflow) => (
+                  <div
+                    key={workflow}
+                    className="custom-control custom-checkbox"
+                  >
+                    <input
+                      type="checkbox"
+                      className="custom-control-input"
+                      id={workflow}
+                      onChange={handleChange}
+                    />
+                    <label className="custom-control-label" for={workflow}>
+                      {workflow}
+                    </label>
+                  </div>
+                ))}
             </div>
           </fieldset>
         ) : (

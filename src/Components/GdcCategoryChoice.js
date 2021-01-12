@@ -70,13 +70,12 @@ export default function GdcCategoryChoice(props) {
   }
 
   const handleChange = (e) => {
-    const selection = e.target.id;
-
     if (e.target.checked) {
-      setSelectedCategory([...selectedCategory, selection]);
+      setSelectedCategory([...selectedCategory, e.target.id]);
     } else {
-      const index = selectedCategory.indexOf(selection);
-      setSelectedCategory((prev) => prev.slice(index, 1));
+      setSelectedCategory((prev) =>
+        prev.filter((item) => item !== e.target.id)
+      );
     }
   };
 
@@ -97,7 +96,7 @@ export default function GdcCategoryChoice(props) {
           <fieldset>
             <div className="form-group">
               {uniqueCategories.map((category) => (
-                <div className="custom-control custom-checkbox">
+                <div key={category} className="custom-control custom-checkbox">
                   <input
                     type="checkbox"
                     className="custom-control-input"
