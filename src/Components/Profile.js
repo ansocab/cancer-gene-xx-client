@@ -32,7 +32,7 @@ export default function Profile() {
   if (Object.keys(session).length !== 0) {
     return (
       <div style={{ margin: "20px" }}>
-        <p>{`Welcome ${session.name}!`}</p>
+        <p>{`Welcome ${session.user.name}!`}</p>
         <p>This is your profile page</p>
       </div>
     );
