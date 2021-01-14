@@ -37,12 +37,10 @@ export default function EnsgSearch() {
 
 	const handleSubmit = (e) => {
 		e.preventDefault()
-		console.log(inputValue)
 		getHgncId(inputValue)
 	}
 
 	const handleClick = (e) => {
-		console.log(e.target.getAttribute('value'))
 		getEnsgNumber(e.target.getAttribute('value'))
 	}
 
@@ -51,7 +49,7 @@ export default function EnsgSearch() {
 			<form onSubmit={handleSubmit} style={{ margin: '60px' }}>
 				<input
 					type='text'
-					class='form-control'
+					className='form-control'
 					id='inputDefault'
 					placeholder='Gene in any name'
 					onChange={handleChange}
@@ -66,10 +64,10 @@ export default function EnsgSearch() {
 					Search
 				</Button>
 			</form>
-			<ul class='list-group'>
+			<ul className='list-group'>
 				{firstSearchResults.map((result) => (
 					<li
-						class='list-group-item list-group-item-action d-flex justify-content-between align-items-center'
+						className='list-group-item list-group-item-action d-flex justify-content-between align-items-center'
 						key={result.hgnc_id}
 						value={result.hgnc_id}
 						onClick={handleClick}
