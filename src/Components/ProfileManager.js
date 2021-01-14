@@ -12,10 +12,25 @@ export default function ProfileManager() {
   const history = useHistory();
 
   const handleVisibility = (modal) => {
-    if (modal === "registered") {
-      setRegisterModalShow(false);
-    } else {
-      setLoginModalShow(false);
+    switch (modal) {
+      case "loggedIn":
+        setLoginModalShow(false);
+        history.push("profile");
+        break;
+      case "registered":
+        setRegisterModalShow(false);
+        history.push("profile");
+        break;
+      case "goToLogin":
+        setRegisterModalShow(false);
+        setLoginModalShow(true);
+        break;
+      case "goToRegister":
+        setLoginModalShow(false);
+        setRegisterModalShow(true);
+        break;
+      default:
+        break;
     }
   };
 
@@ -64,7 +79,7 @@ export default function ProfileManager() {
           </>
         ) : (
           <>
-            <p className="mt-5">{`Logged in as ${session.name}`}</p>
+            <p className="mt-5">{`Logged in as ${session.user.name}`}</p>
             <Button variant="primary" onClick={handleLogout}>
               Logout
             </Button>

@@ -11,3 +11,9 @@
   max-height: 60vh;
   overflow-y: auto;
 }
+
+.link-style:hover {
+  color: rgb(80, 131, 195) !important;
+  cursor: pointer;
+  text-decoration: underline;
+}
