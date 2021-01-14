@@ -20,12 +20,15 @@ export default function App(props) {
 
 	const unarchive = async function (files) {
 		let unzippedFiles = []
-		await untar(files).progress(function (extractedFile) {
-			const newFileOutput = pako.ungzip(extractedFile.buffer, {
-				to: 'string',
+		console.log('this is happening', files)
+		try {
+			await untar(files).progress(function (extractedFile) {
+				const newFileOutput = pako.ungzip(extractedFile.buffer, {
+					to: 'string',
+				})
+				unzippedFiles.push({ [extractedFile.name]: newFileOutput })
 			})
-			unzippedFiles.push({ [extractedFile.name]: newFileOutput })
-		})
+		} catch (err) {}
 		return unzippedFiles
 	}
 
