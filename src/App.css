@@ -17,3 +17,42 @@
   cursor: pointer;
   text-decoration: underline;
 }
+
+.dark-blue {
+  color: rgb(53, 64, 80) !important;
+}
+
+.custom-list-group h5,
+.custom-list-group h6,
+.custom-list-group p,
+.custom-list-group svg {
+  color: #212529;
+}
+
+.custom-list-item {
+  border: 2px solid rgba(53, 64, 80);
+  border-top-width: 2px !important;
+  border-radius: 0.25em;
+}
+
+.vertical-line {
+  border-left: 1.5px solid #212529;
+  height: 20px;
+  margin: auto 5px;
+}
+
+.custom-checkbox input[type="checkbox"]:disabled + label:before {
+  border-color: #eee;
+  color: #ccc;
+  background: white;
+}
+
+.list-icons svg {
+  margin-left: 20px;
+  transform: scale(1.15);
+}
+
+.search-button {
+  margin-bottom: 1rem;
+  margin-top: auto;
+}
