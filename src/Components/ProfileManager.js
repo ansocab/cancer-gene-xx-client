@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
 import { removeSessionCookie, SessionContext } from "../Helpers/session";
-import { Modal, Button } from "react-bootstrap";
+import { Modal, OverlayTrigger, Popover, Button } from "react-bootstrap";
 
 export default function ProfileManager() {
   const [loginModalShow, setLoginModalShow] = useState(false);
@@ -58,34 +58,65 @@ export default function ProfileManager() {
 
   return (
     <>
-      <div className="text-right mr-5">
-        {Object.keys(session).length === 0 ? (
-          <>
-            <Button
-              className="mt-5 mr-3"
-              variant="primary"
-              onClick={() => setLoginModalShow(true)}
-            >
-              Login
-            </Button>
+      <OverlayTrigger
+        trigger="click"
+        key="bottom"
+        placement="bottom"
+        overlay={
+          <Popover id="popover-positioned-bottom" className="mv-25">
+            <Popover.Title as="h3">
+              {Object.keys(session).length !== 0
+                ? `Logged in as ${session.user.name}`
+                : "New to BestNameEver? Create an account"}
+            </Popover.Title>
+            <Popover.Content>
+              <div className="text-right">
+                {Object.keys(session).length === 0 ? (
+                  <>
+                    <Button
+                      className="mr-3"
+                      variant="primary"
+                      onClick={() => setLoginModalShow(true)}
+                    >
+                      Login
+                    </Button>
 
-            <Button
-              className="mt-5"
-              variant="primary"
-              onClick={() => setRegisterModalShow(true)}
-            >
-              Register
-            </Button>
-          </>
-        ) : (
-          <>
-            <p className="mt-5">{`Logged in as ${session.user.name}`}</p>
-            <Button variant="primary" onClick={handleLogout}>
-              Logout
-            </Button>
-          </>
-        )}
-      </div>
+                    <Button
+                      variant="primary"
+                      onClick={() => setRegisterModalShow(true)}
+                    >
+                      Register
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button variant="primary" onClick={handleLogout}>
+                      Logout
+                    </Button>
+                  </>
+                )}
+              </div>
+            </Popover.Content>
+          </Popover>
+        }
+      >
+        <Button variant="secondary">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-person-circle"
+            viewBox="0 0 16 16"
+          >
+            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+            <path
+              fill-rule="evenodd"
+              d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
+            />
+          </svg>
+        </Button>
+      </OverlayTrigger>
 
       <Modal
         aria-labelledby="contained-modal-title-vcenter"
