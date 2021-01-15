@@ -1,10 +1,8 @@
 import React, { useState, useContext } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Button } from 'react-bootstrap'
-import { SearchContext } from '../Helpers/search'
 
 export default function EnsgSearch() {
-	const { setSearch } = useContext(SearchContext)
 	const [inputValue, setInputValue] = useState('')
 	const [firstSearchResults, setFirstSearchResults] = useState([])
 	const history = useHistory()
@@ -26,7 +24,6 @@ export default function EnsgSearch() {
 		})
 			.then((res) => res.json())
 			.then((res) => {
-				setSearch(res.response.docs[0].ensembl_gene_id)
 				history.push(res.response.docs[0].ensembl_gene_id)
 			})
 	}

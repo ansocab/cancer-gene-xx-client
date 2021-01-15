@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import * as d3 from 'd3v4'
+import CollapsableCard from './CollapsableCard'
 
 export default function Boxplot(props) {
 	function buildPlot() {
@@ -171,5 +172,9 @@ export default function Boxplot(props) {
 		buildPlot()
 	}, [])
 
-	return <div id='my_dataviz'></div>
+	return (
+		<CollapsableCard title='Box Plot'>
+			<div className='card-text' id='my_dataviz'></div>
+		</CollapsableCard>
+	)
 }
