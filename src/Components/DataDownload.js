@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useContext } from 'react'
-import { Button } from 'react-bootstrap'
+import React, { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
 // import download from "downloadjs";
 import untar from 'js-untar'
 import BoxPlot from './BoxPlot'
-import { SearchContext } from '../Helpers/search'
+import CollapsableCard from './CollapsableCard'
 
 // const extract = require("extract-zip");
 const pako = require('pako')
@@ -13,19 +13,23 @@ const pako = require('pako')
 // for each unarchived file, ungzip it DONE
 // for each ungzipped file, find the correct line of text, save to object with key=filename, value=value of matching
 
-export default function App(props) {
-	const { search } = useContext(SearchContext)
+export default function DataDownload(props) {
+	const { ensgNumber } = useParams()
+	console.log(ensgNumber)
 	const [results, setResults] = useState([])
 	const [boxPlotValues, setBoxPlotValues] = useState([])
 
 	const unarchive = async function (files) {
 		let unzippedFiles = []
-		await untar(files).progress(function (extractedFile) {
-			const newFileOutput = pako.ungzip(extractedFile.buffer, {
-				to: 'string',
+		console.log('this is happening', files)
+		try {
+			await untar(files).progress(function (extractedFile) {
+				const newFileOutput = pako.ungzip(extractedFile.buffer, {
+					to: 'string',
+				})
+				unzippedFiles.push({ [extractedFile.name]: newFileOutput })
 			})
-			unzippedFiles.push({ [extractedFile.name]: newFileOutput })
-		})
+		} catch (err) {}
 		return unzippedFiles
 	}
 
@@ -47,7 +51,7 @@ export default function App(props) {
 						var fileLines = Object.values(file)[0].split('\n')
 						for (var i = 0; i < fileLines.length; i++) {
 							var y = fileLines[i].split('\t')
-							if (y[0].includes(search)) {
+							if (y[0].includes(ensgNumber)) {
 								return { [Object.keys(file)[0]]: y[1] }
 							}
 						}
@@ -68,13 +72,25 @@ export default function App(props) {
 	}
 
 	return (
-		<div className='App'>
-			{search}
-			{results.map((r) => (
-				<li key={Object.keys(r)[0]}>
-					{r && Object.keys(r)[0]} {Object.values(r)[0]}
-				</li>
-			))}
+		<div>
+			<CollapsableCard title={`Results for ${ensgNumber}`}>
+				<table class='table table-hover'>
+					<thead>
+						<tr class='table-primary'>
+							<th scope='col'>File name</th>
+							<th scope='col'>FPKM of {ensgNumber}</th>
+						</tr>
+					</thead>
+					<tbody>
+						{results.map((r) => (
+							<tr>
+								<td>{r && Object.keys(r)[0]}</td>
+								<td>{Object.values(r)[0]}</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
+			</CollapsableCard>
 			{boxPlotValues.length && <BoxPlot boxPlotValues={boxPlotValues} />}
 		</div>
 	)

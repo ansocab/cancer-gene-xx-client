@@ -1,21 +1,22 @@
 .App {
+	width: 100%;
 }
 
 .ensg-search-container {
-  text-align: center;
-  max-width: 500px;
-  margin: 0 auto;
+	text-align: center;
+	max-width: 500px;
+	margin: 0 auto;
 }
 
 .projects-container {
-  max-height: 60vh;
-  overflow-y: auto;
+	max-height: 60vh;
+	overflow-y: auto;
 }
 
 .link-style:hover {
-  color: rgb(80, 131, 195) !important;
-  cursor: pointer;
-  text-decoration: underline;
+	color: rgb(80, 131, 195) !important;
+	cursor: pointer;
+	text-decoration: underline;
 }
 
 .dark-blue {
