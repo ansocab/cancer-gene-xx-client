@@ -1,28 +1,40 @@
 .App {
-	width: 100%;
+  width: 100%;
+  height: 100vh;
+  background-color: #ecf0f1;
 }
 
 .ensg-search-container {
-	text-align: center;
-	max-width: 500px;
-	margin: 0 auto;
+  text-align: center;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.choice-container {
+  background-color: white;
 }
 
 .projects-container {
-	max-height: 60vh;
-	overflow-y: auto;
+  max-height: 60vh;
+  overflow-y: auto;
 }
 
 .link-style:hover {
-	color: rgb(80, 131, 195) !important;
-	cursor: pointer;
-	text-decoration: underline;
+  color: rgb(80, 131, 195) !important;
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 .dark-blue {
-  color: rgb(53, 64, 80) !important;
+  color: #2c3e50 !important;
 }
 
+.search-button {
+  margin-bottom: 1rem;
+  margin-top: auto;
+}
+
+/*SEARCHES LIST*/
 .custom-list-group h5,
 .custom-list-group h6,
 .custom-list-group p,
@@ -31,9 +43,13 @@
 }
 
 .custom-list-item {
-  border: 2px solid rgba(53, 64, 80);
-  border-top-width: 2px !important;
+  border: 1px solid #2c3e50;
+  border-top-width: 1px !important;
   border-radius: 0.25em;
+}
+
+.custom-list-item:hover {
+  background-color: white;
 }
 
 .vertical-line {
@@ -49,11 +65,38 @@
 }
 
 .list-icons svg {
-  margin-left: 20px;
-  transform: scale(1.15);
+  transform: scale(1.2);
+  pointer-events: none;
 }
 
-.search-button {
-  margin-bottom: 1rem;
-  margin-top: auto;
+.list-icons button:hover {
+  opacity: 0.75;
 }
+
+.tooltip-inner {
+  background-color: rgb(90, 92, 95);
+  opacity: 1;
+}
+
+/* NAVIGATION */
+.profile-button {
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.profile-button:hover {
+  color: #212529;
+  background-color: transparent;
+}
+
+.profile-button:focus {
+  color: #212529;
+  background-color: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+/* button {
+  outline: none !important;
+  box-shadow: none !important;
+} */
