@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import DataFetch from './DataFetch'
-import { Col } from 'react-bootstrap'
+import { Col, Button } from 'react-bootstrap'
 import '../App.css'
 
 export default function GdcWorkflowChoice(props) {
@@ -97,13 +97,18 @@ export default function GdcWorkflowChoice(props) {
 		}
 	}
 
-	useEffect(() => {
+	const handleClick = (e) => {
 		if (selectedWorkflow.length !== 0) {
+			setStartDataFetch(true)
+		} else if (
+			selectedWorkflow.length === 0 &&
+			props.dataType.includes('Clinical Supplement', 0)
+		) {
 			setStartDataFetch(true)
 		} else {
 			setStartDataFetch(false)
 		}
-	}, [selectedWorkflow])
+	}
 
 	return (
 		<>
@@ -135,6 +140,11 @@ export default function GdcWorkflowChoice(props) {
 				) : (
 					<h1>loading available GDC workflows...</h1>
 				)}
+			</Col>
+			<Col md={{ span: 6, offset: 6 }} xl={{ span: 3, offset: 9 }}>
+				<Button onClick={handleClick} className=' my-4'>
+					Get Data
+				</Button>
 			</Col>
 			<div>
 				{startDataFetch && (
