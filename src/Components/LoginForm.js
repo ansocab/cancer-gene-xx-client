@@ -19,7 +19,6 @@ export default function LoginForm({ callback }) {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res.userID);
         if (res.success === true) {
           setSessionCookie(res);
           setSession(res);

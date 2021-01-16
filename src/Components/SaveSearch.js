@@ -23,6 +23,7 @@ export default function SaveSearch() {
       body: JSON.stringify({
         ...searchSummary,
         search_name: searchName.current.value,
+        pinned: false,
         user_id: session.userID,
       }),
       credentials: "include",

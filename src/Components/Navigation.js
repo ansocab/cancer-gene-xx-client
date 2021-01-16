@@ -1,44 +1,25 @@
 import ProfileManager from "./ProfileManager";
+import { Navbar, Nav } from "react-bootstrap";
 
 export default function Navigation() {
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a className="navbar-brand" href="/">
-        Navbar
-      </a>
-      <button
-        className="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarColor02"
-        aria-controls="navbarColor02"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span className="navbar-toggler-icon"></span>
-      </button>
-
-      <div className="collapse navbar-collapse" id="navbarColor02">
-        <ul className="navbar-nav mr-auto">
-          <li className="nav-item">
-            <a className="nav-link" href="/">
-              Home
-              <span className="sr-only">(current)</span>
-            </a>
-          </li>
-          <li className="nav-item">
-            <a className="nav-link" href="/profile">
-              Profile
-            </a>
-          </li>
-          <li className="nav-item">
-            <a className="nav-link" href="#">
-              About
-            </a>
-          </li>
-        </ul>
-      </div>
-      <ProfileManager />
-    </nav>
+    <Navbar className="navbar-dark" bg="dark" expand="sm">
+      <Navbar.Brand href="/">BestNameEver</Navbar.Brand>
+      <Navbar.Toggle aria-controls="navbarColor02" />
+      <Navbar.Collapse id="navbarColor02">
+        <Nav className="mr-auto navbar-nav">
+          <Nav.Link className="nav-link" href="/">
+            Home
+          </Nav.Link>
+          <Nav.Link className="nav-link" href="/profile">
+            Profile
+          </Nav.Link>
+          <Nav.Link className="nav-link" href="#">
+            About
+          </Nav.Link>
+        </Nav>
+        <ProfileManager />
+      </Navbar.Collapse>
+    </Navbar>
   );
 }
