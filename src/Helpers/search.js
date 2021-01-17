@@ -1,18 +1,21 @@
-import React, { useState, createContext } from "react";
+import React, { useState, createContext } from 'react'
 
-export const SearchContext = createContext();
+export const SearchContext = createContext()
 
 export const SearchProvider = ({ children }) => {
-  const [searchSummary, setSearchSummary] = useState({});
+	const [searchSummary, setSearchSummary] = useState({})
+	const [cancerData, setCancerData] = useState([])
 
-  return (
-    <SearchContext.Provider
-      value={{
-        searchSummary,
-        setSearchSummary,
-      }}
-    >
-      {children}
-    </SearchContext.Provider>
-  );
-};
+	return (
+		<SearchContext.Provider
+			value={{
+				searchSummary,
+				setSearchSummary,
+				cancerData,
+				setCancerData,
+			}}
+		>
+			{children}
+		</SearchContext.Provider>
+	)
+}
