@@ -3,7 +3,8 @@ import { Switch, Route } from "react-router-dom";
 import { SearchContext } from "./Helpers/search";
 import EnsgSearch from "./Components/EnsgSearch";
 import GdcProjectChoice from "./Components/GdcProjectChoice";
-import Profile from "./Components/Profile";
+import SavedSearches from "./Components/SavedSearches";
+import SavedSearchesDetail from "./Components/SavedSearchesDetail";
 import SaveSearch from "./Components/SaveSearch";
 import Navigation from "./Components/Navigation";
 import DataFetch from "./Components/DataFetch";
@@ -22,8 +23,11 @@ function App() {
           <Route exact path="/">
             <EnsgSearch />
           </Route>
-          <Route path="/profile">
-            <Profile />
+          <Route path="/savedsearches/:searchId">
+            <SavedSearchesDetail />
+          </Route>
+          <Route path="/savedsearches">
+            <SavedSearches />
           </Route>
           <Route path="/:ensgNumber">
             {Object.keys(searchSummary).length !== 0 && <SaveSearch />}

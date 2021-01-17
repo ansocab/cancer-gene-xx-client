@@ -18,11 +18,11 @@ export default function ProfileManager() {
     switch (modal) {
       case "loggedIn":
         setLoginModalShow(false);
-        history.push("profile");
+        history.push("savedsearches");
         break;
       case "registered":
         setRegisterModalShow(false);
-        history.push("profile");
+        history.push("savedsearches");
         break;
       case "goToLogin":
         setRegisterModalShow(false);

@@ -11,8 +11,8 @@ export default function Navigation() {
           <Nav.Link className="nav-link" href="/">
             Home
           </Nav.Link>
-          <Nav.Link className="nav-link" href="/profile">
-            Profile
+          <Nav.Link className="nav-link" href="/savedsearches">
+            Searches
           </Nav.Link>
           <Nav.Link className="nav-link" href="#">
             About
