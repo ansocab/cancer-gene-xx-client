@@ -12,7 +12,7 @@ import {
 import { Trash } from "react-bootstrap-icons";
 import "../App.css";
 
-export default function Profile() {
+export default function SavedSearches() {
   const history = useHistory();
   const { session } = useContext(SessionContext);
   const [userSearches, setUserSearches] = useState([]);
@@ -44,7 +44,7 @@ export default function Profile() {
   }, []);
 
   const getUserSearches = () => {
-    fetch(`http://localhost:4000/usersearchs/${session.userID}`, {
+    fetch(`http://localhost:4000/user/usersearchs/${session.userID}`, {
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
@@ -197,6 +197,11 @@ export default function Profile() {
     setUserSearches(newAllSearches);
   };
 
+  const handleShowData = (e) => {
+    const index = userSearches.findIndex((item) => item._id === e.target.value);
+    history.push(`/savedsearches/${userSearches[index]._id}`);
+  };
+
   if (Object.keys(session).length !== 0) {
     return (
       <div style={{ margin: "20px" }}>
@@ -332,8 +337,13 @@ export default function Profile() {
                     </Col>
                   </Row>
                   <div className="d-flex w-100 justify-content-between mt-4 mb-1">
-                    <button type="button" className="btn btn-primary">
-                      Get data
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      value={search._id}
+                      onClick={handleShowData}
+                    >
+                      Show data
                     </button>
                     <p>{formatDate(search.createdAt)}</p>
                   </div>

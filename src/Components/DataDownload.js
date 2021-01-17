@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 // import download from "downloadjs";
 import untar from "js-untar";
 import BoxPlot from "./BoxPlot";
 import CollapsableCard from "./CollapsableCard";
+import { SearchContext } from "../Helpers/search";
 import Loading from "./Loading";
 import { merge } from "d3v4";
 
@@ -20,7 +21,7 @@ export default function DataDownload(props) {
   const [results, setResults] = useState([]);
   const [boxPlotValues, setBoxPlotValues] = useState([]);
   const [caseIds, setCaseIds] = useState([]);
-  const [mergedData, setMergedData] = useState([]);
+  const { cancerData, setCancerData } = useContext(SearchContext);
 
   const unarchive = async function (files) {
     let unzippedFiles = [];
@@ -189,8 +190,8 @@ export default function DataDownload(props) {
                 middlePart.node.diagnoses.hits.edges[0].node.tumor_stage,
             })
         );
-        console.log("array of data objects: " - arrayOfDataObjects);
-        setMergedData(arrayOfDataObjects);
+        console.log("array of data objects: " + arrayOfDataObjects);
+        setCancerData({ data: arrayOfDataObjects });
       });
   }
 
@@ -203,9 +204,9 @@ export default function DataDownload(props) {
   }, [results]);
 
   useEffect(() => {
-    console.log("merged data: " + mergedData);
+    console.log(cancerData);
     getBoxPlotData();
-  }, [mergedData]);
+  }, [cancerData]);
 
   function getBoxPlotData() {
     let helperArray = [];
@@ -230,8 +231,8 @@ export default function DataDownload(props) {
             </tr>
           </thead>
           <tbody>
-            {mergedData.length &&
-              mergedData.map((r) => (
+            {Object.keys(cancerData).length !== 0 &&
+              cancerData.data.map((r) => (
                 <tr>
                   <td>{r.file_id}</td>
                   <td>{r.gene_value}</td>

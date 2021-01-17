@@ -13,13 +13,35 @@ export default function SaveSearch() {
   const [showFeedback, setShowFeedback] = useState(false);
   const [success, setSuccess] = useState(false);
   const { session } = useContext(SessionContext);
-  const { searchSummary } = useContext(SearchContext);
+  const { cancerData, searchSummary } = useContext(SearchContext);
   const searchName = useRef();
   const { ensgNumber } = useParams();
 
   const saveSearch = (e) => {
     e.preventDefault();
 
+    fetch("http://localhost:4000/cancerdata", {
+      method: "POST",
+      body: JSON.stringify(cancerData),
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      "Access-Control-Allow-Origin": "http://localhost:4000",
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        if (res.success === true) {
+          saveSearchQuery(res.newCancerData._id);
+        } else {
+          console.log("could not save cancer data");
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const saveSearchQuery = (cancerDataId) => {
     fetch("http://localhost:4000/usersearchs", {
       method: "POST",
       body: JSON.stringify({
@@ -28,6 +50,7 @@ export default function SaveSearch() {
         ensg_number: ensgNumber,
         pinned: false,
         user_id: session.userID,
+        cancer_data_id: cancerDataId,
       }),
       credentials: "include",
       headers: {
@@ -74,13 +97,15 @@ export default function SaveSearch() {
 
   return (
     <>
-      <Button
-        variant="primary"
-        className="mt-4 mb-4"
-        onClick={handleSearchSave}
-      >
-        Save search
-      </Button>
+      <div className="w-100 d-flex">
+        <Button
+          variant="primary"
+          className="mt-4 ml-auto"
+          onClick={handleSearchSave}
+        >
+          Save search
+        </Button>
+      </div>
 
       <Modal
         aria-labelledby="contained-modal-title-vcenter"
