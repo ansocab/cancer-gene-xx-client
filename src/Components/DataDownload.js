@@ -16,13 +16,13 @@ const pako = require('pako')
 
 export default function DataDownload(props) {
 	const { ensgNumber } = useParams()
-	console.log(ensgNumber)
 	const [results, setResults] = useState([])
 	const [boxPlotValues, setBoxPlotValues] = useState([])
+	const [caseIds, setCaseIds] = useState([])
+	const [mergedData, setMergedData] = useState([])
 
 	const unarchive = async function (files) {
 		let unzippedFiles = []
-		console.log('this is happening', files)
 		try {
 			await untar(files).progress(function (extractedFile) {
 				const newFileOutput = pako.ungzip(extractedFile.buffer, {
@@ -34,7 +34,7 @@ export default function DataDownload(props) {
 		return unzippedFiles
 	}
 
-	useEffect(() => {
+	function fetchDataValues() {
 		fetch('https://api.gdc.cancer.gov/data?tarfile', {
 			method: 'post',
 			headers: {
@@ -60,9 +60,9 @@ export default function DataDownload(props) {
 					})
 				)
 			})
-	}, [])
+	}
 
-	useEffect(() => {
+	function fetchCaseIds() {
 		fetch('https://api.gdc.cancer.gov/v0/graphql', {
 			method: 'post',
 			headers: {
@@ -70,58 +70,135 @@ export default function DataDownload(props) {
 			},
 			body: JSON.stringify({
 				query: `
-                query additionalData($filters: FiltersArgument){
-                    viewer {
-                        repository {
-                    files {
-                          hits(first: 1000, filters: $filters) {
-                            edges {
-                              node {
-                               file_id
-                               data_category
-							data_type
-							
-						
-                            annotations{
-                                case_id
+				query additionalData($filters: FiltersArgument){
+				  viewer {
+					repository {
+					  files {
+						hits(first: 1000, filters: $filters) {
+						  edges {
+							node {
+							 file_id
+							 data_category
+						  data_type
+						  cases{
+							hits(first: 1000,){
+							  edges{
+								node{
+								  case_id
+								}
+							  }
 							}
-						
-							cases{
-								diagnosis{
-									tumor_grade
-									state
-								}
-								demographics{
-									days_to_death
-									gender
-									vital_status
-								}
-								samples{
-									sample_type
-								}
-							}                            
-                            }
-                        }
-                    } }
-                   }}
-                      }`,
+						  }
+						  }
+					  }
+				  } }
+				
+				}
+				  }}`,
 				variables: {
 					filters: {
 						op: '=',
-						content: { field: 'file.file_id', value: props.idArray },
+						content: {
+							field: 'file_id',
+							value: props.idArray,
+						},
 					},
 				},
 			}),
 		})
 			.then((r) => r.json())
 			.then((r) => {
-				console.log(r)
+				var idArray = []
+				r.data.viewer.repository.files.hits.edges.map((middlePart) =>
+					middlePart.node.cases.hits.edges.map((id) =>
+						idArray.push(id.node.case_id)
+					)
+				)
+				setCaseIds(idArray)
+				fetchCaseData()
 			})
+	}
+
+	function fetchCaseData() {
+		fetch('https://api.gdc.cancer.gov/v0/graphql', {
+			method: 'post',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				query: `
+			query additionalData($filters: FiltersArgument){
+			  viewer {
+				repository {
+		  
+				
+			  cases{
+				hits(first: 1000, filters: $filters){
+				  edges{
+					node{
+					  demographic{
+						gender
+						days_to_death
+						vital_status
+					  }
+					  diagnoses{
+						hits(first:100){
+						  edges{
+							node{
+							  tumor_stage
+							  tumor_grade
+							  
+							}
+						  }
+						}
+					  }
+					}
+				  }
+				}
+			  }
+			}
+			  }}`,
+				variables: {
+					filters: {
+						op: '=',
+						content: {
+							field: 'case_id',
+							value: caseIds,
+						},
+					},
+				},
+			}),
+		})
+			.then((r) => r.json())
+			.then((r) => {
+				let arrayOfDataObjects = []
+				r.data.viewer.repository.cases.hits.edges.map(
+					(middlePart, index) =>
+						(arrayOfDataObjects[index] = {
+							file_id: props.idArray[index],
+							gene_value: Object.values(results[index])[0],
+							case_id: caseIds[index],
+							days_to_death: middlePart.node.demographic.days_to_death,
+							gender: middlePart.node.demographic.gender,
+							vital_status: middlePart.node.demographic.vital_status,
+							tumor_grade:
+								middlePart.node.diagnoses.hits.edges[0].node.tumor_grade,
+							tumor_stage:
+								middlePart.node.diagnoses.hits.edges[0].node.tumor_stage,
+						})
+				)
+				setMergedData(arrayOfDataObjects)
+			})
+	}
+
+	useEffect(() => {
+		fetchDataValues()
+		fetchCaseIds()
 	}, [])
 
 	useEffect(() => {
 		getBoxPlotData()
-	}, [results])
+	}, [mergedData])
 
 	function getBoxPlotData() {
 		let helperArray = []
@@ -135,21 +212,30 @@ export default function DataDownload(props) {
 				<table class='table table-hover'>
 					<thead>
 						<tr class='table-primary'>
-							<th scope='col'>File name</th>
+							<th scope='col'>File ID</th>
 							<th scope='col'>FPKM of {ensgNumber}</th>
+							<th scope='col'>Case ID</th>
+							<th scope='col'>Vital Status</th>
+							<th scope='col'>Days to Death</th>
+							<th scope='col'>Gender</th>
+							<th scope='col'>Tumor Grade</th>
+							<th scope='col'>Tumor Stage</th>
 						</tr>
 					</thead>
 					<tbody>
-						{results.length ? (
-							results.map((r) => (
+						{mergedData.length &&
+							mergedData.map((r) => (
 								<tr>
-									<td>{r && Object.keys(r)[0]}</td>
-									<td>{Object.values(r)[0]}</td>
+									<td>{r.file_id}</td>
+									<td>{r.gene_value}</td>
+									<td>{r.case_id}</td>
+									<td>{r.vital_status}</td>
+									<td>{r.days_to_death}</td>
+									<td>{r.gender}</td>
+									<td>{r.tumor_grade}</td>
+									<td>{r.tumor_stage}</td>
 								</tr>
-							))
-						) : (
-							<Loading />
-						)}
+							))}
 					</tbody>
 				</table>
 			</CollapsableCard>
