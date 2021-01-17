@@ -1,29 +1,31 @@
 import React, { useState } from "react";
 import { Button, Collapse } from "react-bootstrap";
+import { ChevronDown, ChevronUp } from "react-bootstrap-icons";
 import "bootswatch/dist/flatly/bootstrap.min.css";
 
 export default function CollapsableCard(props) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
 
   return (
     <>
-      <div className="card border-primary mb-2 mt-3" style={{ width: "70rem" }}>
-        <div className="card-header">
-          <h5>
-            <Button
-              onClick={() => setOpen(!open)}
-              aria-controls="example-collapse-text"
-              aria-expanded={open}
-            >
-              {props.title}
-            </Button>
-          </h5>
+      <div className="card mb-2 mt-4" style={{ borderColor: "#2c3e50" }}>
+        <div
+          className="card-header"
+          onClick={() => setOpen(!open)}
+          aria-controls="example-collapse-text"
+          aria-expanded={open}
+        >
+          <div className="d-flex justify-content-between align-items-center">
+            <h4 className="my-1">{props.title}</h4>
+            {open ? (
+              <ChevronUp className="ml-3" size={20} />
+            ) : (
+              <ChevronDown className="ml-3" size={20} />
+            )}
+          </div>
         </div>
         <Collapse in={open}>
-          <div className="card-body">
-            <h4 className="card-title">Primary card title</h4>
-            {props.children}
-          </div>
+          <div className="card-body">{props.children}</div>
         </Collapse>
       </div>
     </>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import GdcCategoryChoice from "./GdcCategoryChoice";
+import CollapsableCard from "./CollapsableCard";
 import { Row, Col } from "react-bootstrap";
 import "../App.css";
 
@@ -69,44 +70,46 @@ export default function GdcProjectChoice() {
   };
 
   return (
-    <Row className="justify-content-start choice-container mt-5">
-      <Col md="6" xl="3">
-        <h3>Projects</h3>
-        {gdcProjects ? (
-          <fieldset className="projects-container">
-            <div className="form-group">
-              {gdcProjects.map((project) => (
-                <div
-                  key={project.node.project_id}
-                  className="custom-control custom-checkbox"
-                >
-                  <input
-                    type="checkbox"
-                    className="custom-control-input"
-                    id={project.node.project_id}
-                    onChange={handleChange}
-                  />
-                  <label
-                    className="custom-control-label"
-                    for={project.node.project_id}
+    <CollapsableCard title="Data Selection">
+      <Row className="justify-content-start choice-container">
+        <Col md="6" xl="3">
+          <h4>Projects</h4>
+          {gdcProjects ? (
+            <fieldset className="projects-container">
+              <div className="form-group">
+                {gdcProjects.map((project) => (
+                  <div
+                    key={project.node.project_id}
+                    className="custom-control custom-checkbox"
                   >
-                    {project.node.name}
-                  </label>
-                </div>
-              ))}
-            </div>
-          </fieldset>
-        ) : (
-          <h1>loading available GDC projects...</h1>
-        )}
-      </Col>
-      <>
-        {showCategory && (
-          <>
-            <GdcCategoryChoice project={selectedProjects} />
-          </>
-        )}
-      </>
-    </Row>
+                    <input
+                      type="checkbox"
+                      className="custom-control-input"
+                      id={project.node.project_id}
+                      onChange={handleChange}
+                    />
+                    <label
+                      className="custom-control-label"
+                      for={project.node.project_id}
+                    >
+                      {project.node.name}
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </fieldset>
+          ) : (
+            <h1>loading available GDC projects...</h1>
+          )}
+        </Col>
+        <>
+          {showCategory && (
+            <>
+              <GdcCategoryChoice project={selectedProjects} />
+            </>
+          )}
+        </>
+      </Row>
+    </CollapsableCard>
   );
 }

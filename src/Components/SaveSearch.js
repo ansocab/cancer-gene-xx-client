@@ -1,4 +1,5 @@
 import React, { useState, useContext, useRef } from "react";
+import { useParams } from "react-router-dom";
 import { SessionContext } from "../Helpers/session";
 import { SearchContext } from "../Helpers/search";
 import LoginForm from "./LoginForm";
@@ -14,6 +15,7 @@ export default function SaveSearch() {
   const { session } = useContext(SessionContext);
   const { searchSummary } = useContext(SearchContext);
   const searchName = useRef();
+  const { ensgNumber } = useParams();
 
   const saveSearch = (e) => {
     e.preventDefault();
@@ -23,6 +25,7 @@ export default function SaveSearch() {
       body: JSON.stringify({
         ...searchSummary,
         search_name: searchName.current.value,
+        ensg_number: ensgNumber,
         pinned: false,
         user_id: session.userID,
       }),
