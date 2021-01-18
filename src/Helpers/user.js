@@ -10,14 +10,19 @@ export const UserContext = createContext();
 export const UserContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
+  const serverUrl =
+    process.env.NODE_ENV === "production"
+      ? process.env.REACT_APP_PROD_SERVER
+      : process.env.REACT_APP_DEV_SERVER;
+
   useEffect(() => {
     const getUser = () => {
-      fetch("https://tcgasearcher.herokuapp.com/profile", {
+      fetch(`${serverUrl}/profile`, {
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
-        "Access-Control-Allow-Origin": "https://tcgasearcher.herokuapp.com",
+        "Access-Control-Allow-Origin": serverUrl,
       })
         .then((res) => res.json())
         .then((res) => {
@@ -34,7 +39,7 @@ export const UserContextProvider = ({ children }) => {
   }, []);
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user, setUser, serverUrl }}>
       {children}
     </UserContext.Provider>
   );

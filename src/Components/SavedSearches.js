@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext, useRef } from "react";
 import { useHistory } from "react-router-dom";
+import { UserContext } from "../Helpers/user";
 import {
   Row,
   Col,
@@ -17,14 +18,15 @@ export default function SavedSearches() {
   const [filteredUserSearches, setFilteredUserSearches] = useState([]);
   const searchField = useRef();
   const searchTerm = useRef();
+  const { serverUrl } = useContext(UserContext);
 
   const getUserSearches = () => {
-    fetch(`https://tcgasearcher.herokuapp.com/user/usersearchs`, {
+    fetch(`${serverUrl}/user/usersearchs`, {
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
-      "Access-Control-Allow-Origin": "https://tcgasearcher.herokuapp.com",
+      "Access-Control-Allow-Origin": serverUrl,
     })
       .then((res) => res.json())
       .then((res) => {
@@ -39,13 +41,13 @@ export default function SavedSearches() {
   }, []);
 
   const deleteUserSearch = (id) => {
-    fetch(`https://tcgasearcher.herokuapp.com/usersearchs/${id}`, {
+    fetch(`${serverUrl}/usersearchs/${id}`, {
       method: "DELETE",
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
-      "Access-Control-Allow-Origin": "https://tcgasearcher.herokuapp.com",
+      "Access-Control-Allow-Origin": serverUrl,
     })
       .then((res) => res.json())
       .then((res) => {
@@ -55,14 +57,14 @@ export default function SavedSearches() {
   };
 
   const updateUserSearch = (id, body) => {
-    fetch(`https://tcgasearcher.herokuapp.com/usersearchs/${id}`, {
+    fetch(`${serverUrl}/usersearchs/${id}`, {
       method: "PUT",
       body: JSON.stringify(body),
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
-      "Access-Control-Allow-Origin": "https://tcgasearcher.herokuapp.com",
+      "Access-Control-Allow-Origin": serverUrl,
     })
       .then((res) => res.json())
       .then((res) => {

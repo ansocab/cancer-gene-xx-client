@@ -1,20 +1,22 @@
-import { useRef } from "react";
+import { useRef, useContext } from "react";
 import { Form, Button } from "react-bootstrap";
+import { UserContext } from "../Helpers/user";
 
 export default function RegisterForm({ callback }) {
   const nameValue = useRef();
   const emailValue = useRef();
   const passwordValue = useRef();
+  const { serverUrl } = useContext(UserContext);
 
   const register = (data) => {
-    fetch("https://tcgasearcher.herokuapp.com/register", {
+    fetch(`${serverUrl}/register`, {
       method: "POST",
       body: JSON.stringify(data),
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
-      "Access-Control-Allow-Origin": "https://tcgasearcher.herokuapp.com",
+      "Access-Control-Allow-Origin": serverUrl,
     })
       .then((res) => res.json())
       .then((res) => {
