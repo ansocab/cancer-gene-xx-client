@@ -1,13 +1,16 @@
 import React from "react";
 import "../Loading.css";
 
-export default function Loading() {
+export default function Loading({ topMargin }) {
   return (
-    <div className="inner" style={{ width: "200px", height: "200px" }}>
+    <div
+      className="w-100 d-flex justify-content-center"
+      style={{ marginTop: topMargin }}
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         xmlnsXlink="http://www.w3.org/1999/xlink"
-        style={{ margin: "auto", background: "#ffff", display: "block" }}
+        style={{ background: "none" }}
         width="100px"
         height="100px"
         viewBox="0 0 100 100"

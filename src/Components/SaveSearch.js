@@ -6,7 +6,7 @@ import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
 import { Button, Modal, Form } from "react-bootstrap";
 
-export default function SaveSearch() {
+export default function SaveSearch({ enabled }) {
   const [showSearchSaveModal, setShowSearchSaveModal] = useState(false);
   const [showLoginButtonModal, setShowLoginButtonModal] = useState(false);
   const [showLoginForm, setShowLoginForm] = useState(true);
@@ -98,13 +98,19 @@ export default function SaveSearch() {
   return (
     <>
       <div className="w-100 d-flex">
-        <Button
-          variant="primary"
-          className="mt-4 ml-auto"
-          onClick={handleSearchSave}
-        >
-          Save search
-        </Button>
+        {enabled ? (
+          <Button
+            variant="primary"
+            className="mt-4 ml-auto"
+            onClick={handleSearchSave}
+          >
+            Save search
+          </Button>
+        ) : (
+          <Button variant="primary" className="mt-4 ml-auto" disabled>
+            Save search
+          </Button>
+        )}
       </div>
 
       <Modal
