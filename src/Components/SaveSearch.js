@@ -1,7 +1,7 @@
 import React, { useState, useContext, useRef } from "react";
 import { useParams } from "react-router-dom";
-import { SessionContext } from "../Helpers/session";
 import { SearchContext } from "../Helpers/search";
+import { UserContext } from "../Helpers/user";
 import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
 import { Button, Modal, Form } from "react-bootstrap";
@@ -12,8 +12,8 @@ export default function SaveSearch() {
   const [showLoginForm, setShowLoginForm] = useState(true);
   const [showFeedback, setShowFeedback] = useState(false);
   const [success, setSuccess] = useState(false);
-  const { session } = useContext(SessionContext);
   const { cancerData, searchSummary } = useContext(SearchContext);
+  const { user } = useContext(UserContext);
   const searchName = useRef();
   const { ensgNumber } = useParams();
 
@@ -49,14 +49,14 @@ export default function SaveSearch() {
         search_name: searchName.current.value,
         ensg_number: ensgNumber,
         pinned: false,
-        user_id: session.userID,
+        user_id: user.user_id,
         cancer_data_id: cancerDataId,
       }),
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
-      "Access-Control-Allow-Origin": "https://tcgasearcher.herokuapp.com",
+      "Access-Control-Allow-Origin": "http://tcgasearcher.herokuapp.com",
     })
       .then((res) => res.json())
       .then((res) => {
@@ -72,7 +72,7 @@ export default function SaveSearch() {
   };
 
   const handleSearchSave = () => {
-    if (Object.keys(session).length !== 0) {
+    if (user !== null) {
       setShowSearchSaveModal(true);
     } else {
       setShowLoginForm(true);

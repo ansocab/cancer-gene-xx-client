@@ -1,9 +1,7 @@
-import { useContext, useRef } from "react";
-import { setSessionCookie, SessionContext } from "../Helpers/session";
+import { useRef } from "react";
 import { Form, Button } from "react-bootstrap";
 
 export default function RegisterForm({ callback }) {
-  const { setSession } = useContext(SessionContext);
   const nameValue = useRef();
   const emailValue = useRef();
   const passwordValue = useRef();
@@ -22,8 +20,6 @@ export default function RegisterForm({ callback }) {
       .then((res) => {
         console.log(res);
         if (res.success === true) {
-          setSessionCookie(res);
-          setSession(res);
           callback("registered");
         } else {
           console.log(res);
