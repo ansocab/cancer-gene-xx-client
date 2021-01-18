@@ -1,19 +1,21 @@
-import { useRef } from "react";
+import { useRef, useContext } from "react";
 import { Form, Button } from "react-bootstrap";
+import { UserContext } from "../Helpers/user";
 
 export default function LoginForm({ callback }) {
   const emailValue = useRef();
   const passwordValue = useRef();
+  const { serverUrl } = useContext(UserContext);
 
   const login = (mail, pw) => {
-    fetch("https://tcgasearcher.herokuapp.com/login", {
+    fetch(`${serverUrl}/login`, {
       method: "POST",
       body: JSON.stringify({ email: mail, password: pw }),
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
-      "Access-Control-Allow-Origin": "https://tcgasearcher.herokuapp.com",
+      "Access-Control-Allow-Origin": serverUrl,
     })
       .then((res) => res.json())
       .then((res) => {

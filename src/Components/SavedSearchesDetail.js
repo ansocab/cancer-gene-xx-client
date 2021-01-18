@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Row, Col } from "react-bootstrap";
 import { useParams } from "react-router-dom";
+import { UserContext } from "../Helpers/user";
 import CollapsableCard from "./CollapsableCard";
 import Loading from "./Loading";
 import "../App.css";
@@ -9,16 +10,17 @@ export default function SavedSearchesDetail() {
   const { searchId } = useParams();
   const [currentSearch, setCurrentSearch] = useState({});
   const [cancerData, setCancerData] = useState([]);
+  const { serverUrl } = useContext(UserContext);
 
   useEffect(() => {
     console.log(typeof cancerData);
     const getUserSearches = () => {
-      fetch(`https://tcgasearcher.herokuapp.com/usersearchs/${searchId}`, {
+      fetch(`${serverUrl}/usersearchs/${searchId}`, {
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
-        "Access-Control-Allow-Origin": "https://tcgasearcher.herokuapp.com",
+        "Access-Control-Allow-Origin": serverUrl,
       })
         .then((res) => res.json())
         .then((res) => {
@@ -32,16 +34,13 @@ export default function SavedSearchesDetail() {
 
   useEffect(() => {
     if (Object.keys(currentSearch).length !== 0) {
-      fetch(
-        `https://tcgasearcher.herokuapp.com/cancerdata/${currentSearch.cancer_data_id}`,
-        {
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          "Access-Control-Allow-Origin": "https://tcgasearcher.herokuapp.com",
-        }
-      )
+      fetch(`${serverUrl}/cancerdata/${currentSearch.cancer_data_id}`, {
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        "Access-Control-Allow-Origin": serverUrl,
+      })
         .then((res) => res.json())
         .then((res) => {
           console.log(res);

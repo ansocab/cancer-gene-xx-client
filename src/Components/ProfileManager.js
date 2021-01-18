@@ -12,7 +12,7 @@ export default function ProfileManager() {
   const [loginModalShow, setLoginModalShow] = useState(false);
   const [registerModalShow, setRegisterModalShow] = useState(false);
   const [showOverlay, setShowOverlay] = useState(false);
-  const { user, setUser } = useContext(UserContext);
+  const { user, setUser, serverUrl } = useContext(UserContext);
   const history = useHistory();
 
   const handleVisibility = (modal) => {
@@ -40,12 +40,12 @@ export default function ProfileManager() {
 
   const handleLogout = () => {
     setShowOverlay(false);
-    fetch("https://tcgasearcher.herokuapp.com/logout", {
+    fetch(`${serverUrl}/logout`, {
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
-      "Access-Control-Allow-Origin": "https://tcgasearcher.herokuapp.com",
+      "Access-Control-Allow-Origin": serverUrl,
     })
       .then((res) => res.json())
       .then((res) => {

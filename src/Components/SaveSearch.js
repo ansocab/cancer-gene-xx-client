@@ -13,21 +13,21 @@ export default function SaveSearch() {
   const [showFeedback, setShowFeedback] = useState(false);
   const [success, setSuccess] = useState(false);
   const { cancerData, searchSummary } = useContext(SearchContext);
-  const { user } = useContext(UserContext);
+  const { user, serverUrl } = useContext(UserContext);
   const searchName = useRef();
   const { ensgNumber } = useParams();
 
   const saveSearch = (e) => {
     e.preventDefault();
 
-    fetch("https://tcgasearcher.herokuapp.com/cancerdata", {
+    fetch(`${serverUrl}/cancerdata`, {
       method: "POST",
       body: JSON.stringify(cancerData),
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
-      "Access-Control-Allow-Origin": "https://tcgasearcher.herokuapp.com",
+      "Access-Control-Allow-Origin": serverUrl,
     })
       .then((res) => res.json())
       .then((res) => {
@@ -42,7 +42,7 @@ export default function SaveSearch() {
   };
 
   const saveSearchQuery = (cancerDataId) => {
-    fetch("https://tcgasearcher.herokuapp.com/usersearchs", {
+    fetch(`${serverUrl}/usersearchs`, {
       method: "POST",
       body: JSON.stringify({
         ...searchSummary,
@@ -56,7 +56,7 @@ export default function SaveSearch() {
       headers: {
         "Content-Type": "application/json",
       },
-      "Access-Control-Allow-Origin": "http://tcgasearcher.herokuapp.com",
+      "Access-Control-Allow-Origin": serverUrl,
     })
       .then((res) => res.json())
       .then((res) => {
