@@ -8,14 +8,14 @@ export default function LoginForm({ callback }) {
   const { setSession } = useContext(SessionContext);
 
   const login = (mail, pw) => {
-    fetch("http://localhost:4000/login", {
+    fetch("https://tcgasearcher.herokuapp.com/login", {
       method: "POST",
       body: JSON.stringify({ email: mail, password: pw }),
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
-      "Access-Control-Allow-Origin": "http://localhost:4000",
+      "Access-Control-Allow-Origin": "https://tcgasearcher.herokuapp.com",
     })
       .then((res) => res.json())
       .then((res) => {

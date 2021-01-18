@@ -22,12 +22,12 @@ export default function SavedSearches() {
 
   useEffect(() => {
     const getUser = () => {
-      fetch("http://localhost:4000/profile", {
+      fetch("https://tcgasearcher.herokuapp.com/profile", {
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
-        "Access-Control-Allow-Origin": "http://localhost:4000",
+        "Access-Control-Allow-Origin": "https://tcgasearcher.herokuapp.com",
       })
         .then((res) => res.json())
         .then((res) => {
@@ -44,13 +44,16 @@ export default function SavedSearches() {
   }, []);
 
   const getUserSearches = () => {
-    fetch(`http://localhost:4000/user/usersearchs/${session.userID}`, {
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      "Access-Control-Allow-Origin": "http://localhost:4000",
-    })
+    fetch(
+      `https://tcgasearcher.herokuapp.com/user/usersearchs/${session.userID}`,
+      {
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        "Access-Control-Allow-Origin": "https://tcgasearcher.herokuapp.com",
+      }
+    )
       .then((res) => res.json())
       .then((res) => {
         setFilteredUserSearches(res);
@@ -64,13 +67,13 @@ export default function SavedSearches() {
   }, []);
 
   const deleteUserSearch = (id) => {
-    fetch(`http://localhost:4000/usersearchs/${id}`, {
+    fetch(`https://tcgasearcher.herokuapp.com/usersearchs/${id}`, {
       method: "DELETE",
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
-      "Access-Control-Allow-Origin": "http://localhost:4000",
+      "Access-Control-Allow-Origin": "https://tcgasearcher.herokuapp.com",
     })
       .then((res) => res.json())
       .then((res) => {
@@ -80,14 +83,14 @@ export default function SavedSearches() {
   };
 
   const updateUserSearch = (id, body) => {
-    fetch(`http://localhost:4000/usersearchs/${id}`, {
+    fetch(`https://tcgasearcher.herokuapp.com/usersearchs/${id}`, {
       method: "PUT",
       body: JSON.stringify(body),
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
-      "Access-Control-Allow-Origin": "http://localhost:4000",
+      "Access-Control-Allow-Origin": "https://tcgasearcher.herokuapp.com",
     })
       .then((res) => res.json())
       .then((res) => {

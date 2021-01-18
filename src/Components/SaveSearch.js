@@ -20,14 +20,14 @@ export default function SaveSearch() {
   const saveSearch = (e) => {
     e.preventDefault();
 
-    fetch("http://localhost:4000/cancerdata", {
+    fetch("https://tcgasearcher.herokuapp.com/cancerdata", {
       method: "POST",
       body: JSON.stringify(cancerData),
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
-      "Access-Control-Allow-Origin": "http://localhost:4000",
+      "Access-Control-Allow-Origin": "https://tcgasearcher.herokuapp.com",
     })
       .then((res) => res.json())
       .then((res) => {
@@ -42,7 +42,7 @@ export default function SaveSearch() {
   };
 
   const saveSearchQuery = (cancerDataId) => {
-    fetch("http://localhost:4000/usersearchs", {
+    fetch("https://tcgasearcher.herokuapp.com/usersearchs", {
       method: "POST",
       body: JSON.stringify({
         ...searchSummary,
@@ -56,7 +56,7 @@ export default function SaveSearch() {
       headers: {
         "Content-Type": "application/json",
       },
-      "Access-Control-Allow-Origin": "http://localhost:4000",
+      "Access-Control-Allow-Origin": "https://tcgasearcher.herokuapp.com",
     })
       .then((res) => res.json())
       .then((res) => {

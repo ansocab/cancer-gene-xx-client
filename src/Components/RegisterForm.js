@@ -9,14 +9,14 @@ export default function RegisterForm({ callback }) {
   const passwordValue = useRef();
 
   const register = (data) => {
-    fetch("http://localhost:4000/register", {
+    fetch("https://tcgasearcher.herokuapp.com/register", {
       method: "POST",
       body: JSON.stringify(data),
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
-      "Access-Control-Allow-Origin": "http://localhost:4000",
+      "Access-Control-Allow-Origin": "https://tcgasearcher.herokuapp.com",
     })
       .then((res) => res.json())
       .then((res) => {

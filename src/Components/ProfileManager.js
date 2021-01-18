@@ -39,12 +39,12 @@ export default function ProfileManager() {
 
   const handleLogout = () => {
     setShowOverlay(false);
-    fetch("http://localhost:4000/logout", {
+    fetch("https://tcgasearcher.herokuapp.com/logout", {
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
-      "Access-Control-Allow-Origin": "http://localhost:4000",
+      "Access-Control-Allow-Origin": "https://tcgasearcher.herokuapp.com",
     })
       .then((res) => res.json())
       .then((res) => {
