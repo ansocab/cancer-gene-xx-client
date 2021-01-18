@@ -13,12 +13,12 @@ export default function SavedSearchesDetail() {
   useEffect(() => {
     console.log(typeof cancerData);
     const getUserSearches = () => {
-      fetch(`http://localhost:4000/usersearchs/${searchId}`, {
+      fetch(`https://tcgasearcher.herokuapp.com/usersearchs/${searchId}`, {
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
-        "Access-Control-Allow-Origin": "http://localhost:4000",
+        "Access-Control-Allow-Origin": "https://tcgasearcher.herokuapp.com",
       })
         .then((res) => res.json())
         .then((res) => {
@@ -33,13 +33,13 @@ export default function SavedSearchesDetail() {
   useEffect(() => {
     if (Object.keys(currentSearch).length !== 0) {
       fetch(
-        `http://localhost:4000/cancerdata/${currentSearch.cancer_data_id}`,
+        `https://tcgasearcher.herokuapp.com/cancerdata/${currentSearch.cancer_data_id}`,
         {
           credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },
-          "Access-Control-Allow-Origin": "http://localhost:4000",
+          "Access-Control-Allow-Origin": "https://tcgasearcher.herokuapp.com",
         }
       )
         .then((res) => res.json())

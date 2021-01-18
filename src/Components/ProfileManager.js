@@ -2,16 +2,17 @@ import { useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
-import { removeSessionCookie, SessionContext } from "../Helpers/session";
+import { UserContext } from "../Helpers/user";
 import { Modal, OverlayTrigger, Popover, Button } from "react-bootstrap";
 import { PersonCircle } from "react-bootstrap-icons";
 import "../App.css";
+import { findAllByTestId } from "@testing-library/react";
 
 export default function ProfileManager() {
   const [loginModalShow, setLoginModalShow] = useState(false);
   const [registerModalShow, setRegisterModalShow] = useState(false);
   const [showOverlay, setShowOverlay] = useState(false);
-  const { session, setSession } = useContext(SessionContext);
+  const { user, setUser } = useContext(UserContext);
   const history = useHistory();
 
   const handleVisibility = (modal) => {
@@ -39,19 +40,18 @@ export default function ProfileManager() {
 
   const handleLogout = () => {
     setShowOverlay(false);
-    fetch("http://localhost:4000/logout", {
+    fetch("https://tcgasearcher.herokuapp.com/logout", {
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
-      "Access-Control-Allow-Origin": "http://localhost:4000",
+      "Access-Control-Allow-Origin": "https://tcgasearcher.herokuapp.com",
     })
       .then((res) => res.json())
       .then((res) => {
         console.log(res);
         if (res.success === true) {
-          removeSessionCookie();
-          setSession({});
+          setUser(null);
           history.push(res.redirectUrl);
         } else {
           console.log(res);
@@ -72,13 +72,13 @@ export default function ProfileManager() {
         overlay={
           <Popover id="popover-positioned-bottom" className="mv-25">
             <Popover.Title as="h3">
-              {Object.keys(session).length !== 0
-                ? `Logged in as ${session.user.name}`
+              {user !== null
+                ? `Logged in as ${user.name}`
                 : "New to BestNameEver? Create an account"}
             </Popover.Title>
             <Popover.Content>
               <div className="text-right">
-                {Object.keys(session).length === 0 ? (
+                {user === null ? (
                   <>
                     <Button
                       className="mr-3"

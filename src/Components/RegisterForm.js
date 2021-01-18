@@ -1,29 +1,25 @@
-import { useContext, useRef } from "react";
-import { setSessionCookie, SessionContext } from "../Helpers/session";
+import { useRef } from "react";
 import { Form, Button } from "react-bootstrap";
 
 export default function RegisterForm({ callback }) {
-  const { setSession } = useContext(SessionContext);
   const nameValue = useRef();
   const emailValue = useRef();
   const passwordValue = useRef();
 
   const register = (data) => {
-    fetch("http://localhost:4000/register", {
+    fetch("https://tcgasearcher.herokuapp.com/register", {
       method: "POST",
       body: JSON.stringify(data),
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
-      "Access-Control-Allow-Origin": "http://localhost:4000",
+      "Access-Control-Allow-Origin": "https://tcgasearcher.herokuapp.com",
     })
       .then((res) => res.json())
       .then((res) => {
         console.log(res);
         if (res.success === true) {
-          setSessionCookie(res);
-          setSession(res);
           callback("registered");
         } else {
           console.log(res);
