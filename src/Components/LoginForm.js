@@ -1,27 +1,26 @@
 import { useRef, useContext } from "react";
-import { setSessionCookie, SessionContext } from "../Helpers/session";
 import { Form, Button } from "react-bootstrap";
+import { UserContext } from "../Helpers/user";
 
 export default function LoginForm({ callback }) {
   const emailValue = useRef();
   const passwordValue = useRef();
-  const { setSession } = useContext(SessionContext);
+  const { serverUrl, setUser } = useContext(UserContext);
 
   const login = (mail, pw) => {
-    fetch("http://localhost:4000/login", {
+    fetch(`${serverUrl}/login`, {
       method: "POST",
       body: JSON.stringify({ email: mail, password: pw }),
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
-      "Access-Control-Allow-Origin": "http://localhost:4000",
+      "Access-Control-Allow-Origin": serverUrl,
     })
       .then((res) => res.json())
       .then((res) => {
         if (res.success === true) {
-          setSessionCookie(res);
-          setSession(res);
+          setUser(res.user);
           callback("loggedIn");
         } else {
           console.log(res);

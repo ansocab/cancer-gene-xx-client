@@ -1,29 +1,28 @@
-import { useContext, useRef } from "react";
-import { setSessionCookie, SessionContext } from "../Helpers/session";
+import { useRef, useContext } from "react";
 import { Form, Button } from "react-bootstrap";
+import { UserContext } from "../Helpers/user";
 
 export default function RegisterForm({ callback }) {
-  const { setSession } = useContext(SessionContext);
   const nameValue = useRef();
   const emailValue = useRef();
   const passwordValue = useRef();
+  const { serverUrl, setUser } = useContext(UserContext);
 
   const register = (data) => {
-    fetch("http://localhost:4000/register", {
+    fetch(`${serverUrl}/register`, {
       method: "POST",
       body: JSON.stringify(data),
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
-      "Access-Control-Allow-Origin": "http://localhost:4000",
+      "Access-Control-Allow-Origin": serverUrl,
     })
       .then((res) => res.json())
       .then((res) => {
         console.log(res);
         if (res.success === true) {
-          setSessionCookie(res);
-          setSession(res);
+          setUser(res.user);
           callback("registered");
         } else {
           console.log(res);

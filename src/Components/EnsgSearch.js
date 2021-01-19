@@ -8,7 +8,7 @@ export default function EnsgSearch() {
   const history = useHistory();
 
   function getHgncId(input) {
-    fetch(`http://rest.genenames.org/search/${input}`, {
+    fetch(`https://rest.genenames.org/search/${input}`, {
       headers: { Accept: "application/json" },
     })
       .then((res) => res.json())
@@ -18,7 +18,7 @@ export default function EnsgSearch() {
   }
 
   function getEnsgNumber(name) {
-    const url = `http://rest.genenames.org/fetch/hgnc_id/${name}`;
+    const url = `https://rest.genenames.org/fetch/hgnc_id/${name}`;
     fetch(url, {
       headers: { Accept: "application/json" },
     })

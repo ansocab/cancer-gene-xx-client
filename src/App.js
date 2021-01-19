@@ -30,7 +30,11 @@ function App() {
             <SavedSearches />
           </Route>
           <Route path="/:ensgNumber">
-            {Object.keys(searchSummary).length !== 0 && <SaveSearch />}
+            {Object.keys(searchSummary).length !== 0 ? (
+              <SaveSearch enabled={true} />
+            ) : (
+              <SaveSearch enabled={false} />
+            )}
             <GdcProjectChoice />
             {Object.keys(searchSummary).length !== 0 && <DataFetch />}
           </Route>

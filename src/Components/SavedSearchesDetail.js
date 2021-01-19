@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Row, Col } from "react-bootstrap";
 import { useParams } from "react-router-dom";
+import { UserContext } from "../Helpers/user";
 import CollapsableCard from "./CollapsableCard";
 import Loading from "./Loading";
 import "../App.css";
@@ -9,16 +10,17 @@ export default function SavedSearchesDetail() {
   const { searchId } = useParams();
   const [currentSearch, setCurrentSearch] = useState({});
   const [cancerData, setCancerData] = useState([]);
+  const { serverUrl } = useContext(UserContext);
 
   useEffect(() => {
     console.log(typeof cancerData);
     const getUserSearches = () => {
-      fetch(`http://localhost:4000/usersearchs/${searchId}`, {
+      fetch(`${serverUrl}/usersearchs/${searchId}`, {
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
-        "Access-Control-Allow-Origin": "http://localhost:4000",
+        "Access-Control-Allow-Origin": serverUrl,
       })
         .then((res) => res.json())
         .then((res) => {
@@ -32,16 +34,13 @@ export default function SavedSearchesDetail() {
 
   useEffect(() => {
     if (Object.keys(currentSearch).length !== 0) {
-      fetch(
-        `http://localhost:4000/cancerdata/${currentSearch.cancer_data_id}`,
-        {
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          "Access-Control-Allow-Origin": "http://localhost:4000",
-        }
-      )
+      fetch(`${serverUrl}/cancerdata/${currentSearch.cancer_data_id}`, {
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        "Access-Control-Allow-Origin": serverUrl,
+      })
         .then((res) => res.json())
         .then((res) => {
           console.log(res);
@@ -76,7 +75,7 @@ export default function SavedSearchesDetail() {
   return (
     <>
       {Object.keys(cancerData).length !== 0 ? (
-        <>
+        <div className="list-group custom-list-group mt-5">
           <div className="list-group-item list-group-item-action flex-column align-items-start mb-3 custom-list-item">
             <div className="d-flex w-100 justify-content-between mb-3">
               <div className="d-flex">
@@ -114,38 +113,40 @@ export default function SavedSearchesDetail() {
             </Row>
           </div>
           <CollapsableCard title={`Results for ${currentSearch.ensg_number}`}>
-            <table class="table table-hover">
-              <thead>
-                <tr class="table-primary">
-                  <th scope="col">File ID</th>
-                  <th scope="col">FPKM of {currentSearch.ensg_number}</th>
-                  <th scope="col">Case ID</th>
-                  <th scope="col">Vital Status</th>
-                  <th scope="col">Days to Death</th>
-                  <th scope="col">Gender</th>
-                  <th scope="col">Tumor Grade</th>
-                  <th scope="col">Tumor Stage</th>
-                </tr>
-              </thead>
-              <tbody>
-                {cancerData.data.map((r) => (
-                  <tr>
-                    <td>{r.file_id}</td>
-                    <td>{r.gene_value}</td>
-                    <td>{r.case_id}</td>
-                    <td>{r.vital_status}</td>
-                    <td>{r.days_to_death}</td>
-                    <td>{r.gender}</td>
-                    <td>{r.tumor_grade}</td>
-                    <td>{r.tumor_stage}</td>
+            <div style={{ overflowX: "auto" }}>
+              <table class="table table-hover">
+                <thead>
+                  <tr class="table-primary">
+                    <th scope="col">File ID</th>
+                    <th scope="col">FPKM of {currentSearch.ensg_number}</th>
+                    <th scope="col">Case ID</th>
+                    <th scope="col">Vital Status</th>
+                    <th scope="col">Days to Death</th>
+                    <th scope="col">Gender</th>
+                    <th scope="col">Tumor Grade</th>
+                    <th scope="col">Tumor Stage</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {cancerData.data.map((r) => (
+                    <tr>
+                      <td>{r.file_id}</td>
+                      <td>{r.gene_value}</td>
+                      <td>{r.case_id}</td>
+                      <td>{r.vital_status}</td>
+                      <td>{r.days_to_death}</td>
+                      <td>{r.gender}</td>
+                      <td>{r.tumor_grade}</td>
+                      <td>{r.tumor_stage}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </CollapsableCard>
-        </>
+        </div>
       ) : (
-        <Loading />
+        <Loading topMargin="3em" />
       )}
     </>
   );

@@ -1,5 +1,6 @@
 import React, { useState, createContext } from "react";
-import * as Cookies from "js-cookie";
+
+/* import * as Cookies from "js-cookie";
 
 export const setSessionCookie = (session) => {
   Cookies.remove("session");
@@ -30,4 +31,4 @@ export const SessionProvider = ({ children }) => {
       {children}
     </SessionContext.Provider>
   );
-};
+}; */
