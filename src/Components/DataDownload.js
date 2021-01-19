@@ -217,37 +217,42 @@ export default function DataDownload(props) {
   return (
     <div>
       <CollapsableCard title={`Results for ${ensgNumber}`}>
-        <table class="table table-hover">
-          <thead>
-            <tr class="table-primary">
-              <th scope="col">File ID</th>
-              <th scope="col">FPKM of {ensgNumber}</th>
-              <th scope="col">Case ID</th>
-              <th scope="col">Vital Status</th>
-              <th scope="col">Days to Death</th>
-              <th scope="col">Gender</th>
-              <th scope="col">Tumor Grade</th>
-              <th scope="col">Tumor Stage</th>
-            </tr>
-          </thead>
-          <tbody>
-            {Object.keys(cancerData).length !== 0 &&
-              cancerData.data.map((r) => (
-                <tr>
-                  <td>{r.file_id}</td>
-                  <td>{r.gene_value}</td>
-                  <td>{r.case_id}</td>
-                  <td>{r.vital_status}</td>
-                  <td>{r.days_to_death}</td>
-                  <td>{r.gender}</td>
-                  <td>{r.tumor_grade}</td>
-                  <td>{r.tumor_stage}</td>
+        {Object.keys(cancerData).length !== 0 ? (
+          <div style={{ overflowX: "auto" }}>
+            <table class="table table-hover">
+              <thead>
+                <tr class="table-primary">
+                  <th scope="col">File ID</th>
+                  <th scope="col">FPKM of {ensgNumber}</th>
+                  <th scope="col">Case ID</th>
+                  <th scope="col">Vital Status</th>
+                  <th scope="col">Days to Death</th>
+                  <th scope="col">Gender</th>
+                  <th scope="col">Tumor Grade</th>
+                  <th scope="col">Tumor Stage</th>
                 </tr>
-              ))}
-          </tbody>
-        </table>
+              </thead>
+              <tbody>
+                {cancerData.data.map((r) => (
+                  <tr>
+                    <td>{r.file_id}</td>
+                    <td>{r.gene_value}</td>
+                    <td>{r.case_id}</td>
+                    <td>{r.vital_status}</td>
+                    <td>{r.days_to_death}</td>
+                    <td>{r.gender}</td>
+                    <td>{r.tumor_grade}</td>
+                    <td>{r.tumor_stage}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <Loading topMargin="0" />
+        )}
       </CollapsableCard>
-      {boxPlotValues.length && <BoxPlot boxPlotValues={boxPlotValues} />}
+      {boxPlotValues.length !== 0 && <BoxPlot boxPlotValues={boxPlotValues} />}
     </div>
   );
 }
