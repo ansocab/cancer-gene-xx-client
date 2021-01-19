@@ -256,4 +256,3 @@ export default function DataDownload(props) {
   );
 }
 
-// cancerData={JSON.stringify(cancerData.data)}
