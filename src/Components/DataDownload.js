@@ -251,7 +251,7 @@ export default function DataDownload(props) {
           <Loading topMargin="0" />
         )}
       </CollapsableCard>
-      {boxPlotValues.length !== 0 && <BoxPlot boxPlotValues={boxPlotValues} />}
+      {boxPlotValues.length !== 0 && <BoxPlot cancerData={cancerData} />}
     </div>
   );
 }
