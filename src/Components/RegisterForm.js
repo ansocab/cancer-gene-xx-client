@@ -6,7 +6,7 @@ export default function RegisterForm({ callback }) {
   const nameValue = useRef();
   const emailValue = useRef();
   const passwordValue = useRef();
-  const { serverUrl } = useContext(UserContext);
+  const { serverUrl, setUser } = useContext(UserContext);
 
   const register = (data) => {
     fetch(`${serverUrl}/register`, {
@@ -22,6 +22,7 @@ export default function RegisterForm({ callback }) {
       .then((res) => {
         console.log(res);
         if (res.success === true) {
+          setUser(res.user);
           callback("registered");
         } else {
           console.log(res);

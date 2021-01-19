@@ -5,7 +5,7 @@ import { UserContext } from "../Helpers/user";
 export default function LoginForm({ callback }) {
   const emailValue = useRef();
   const passwordValue = useRef();
-  const { serverUrl } = useContext(UserContext);
+  const { serverUrl, setUser } = useContext(UserContext);
 
   const login = (mail, pw) => {
     fetch(`${serverUrl}/login`, {
@@ -20,6 +20,7 @@ export default function LoginForm({ callback }) {
       .then((res) => res.json())
       .then((res) => {
         if (res.success === true) {
+          setUser(res.user);
           callback("loggedIn");
         } else {
           console.log(res);
