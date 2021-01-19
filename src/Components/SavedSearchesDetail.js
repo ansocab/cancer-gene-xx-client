@@ -3,6 +3,7 @@ import { Row, Col } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { UserContext } from "../Helpers/user";
 import CollapsableCard from "./CollapsableCard";
+import BoxPlot from './BoxPlot'
 import Loading from "./Loading";
 import "../App.css";
 
@@ -144,6 +145,7 @@ export default function SavedSearchesDetail() {
               </table>
             </div>
           </CollapsableCard>
+          <BoxPlot cancerData={cancerData} />
         </div>
       ) : (
         <Loading topMargin="3em" />
