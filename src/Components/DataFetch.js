@@ -60,7 +60,7 @@ export default function DataFetch(props) {
 						viewer {
 							repository {
 						files {
-							  hits(first: 20, filters: $filters) {
+							  hits(first: 50, filters: $filters) {
 								edges {
 								  node {
 								   file_id    
