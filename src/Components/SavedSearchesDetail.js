@@ -115,9 +115,9 @@ export default function SavedSearchesDetail() {
           </div>
           <CollapsableCard title={`Results for ${currentSearch.ensg_number}`}>
             <div style={{ overflowX: "auto" }}>
-              <table class="table table-hover">
+              <table className="table table-hover">
                 <thead>
-                  <tr class="table-primary">
+                  <tr className="table-primary">
                     <th scope="col">File ID</th>
                     <th scope="col">FPKM of {currentSearch.ensg_number}</th>
                     <th scope="col">Case ID</th>

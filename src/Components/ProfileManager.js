@@ -6,7 +6,6 @@ import { UserContext } from "../Helpers/user";
 import { Modal, OverlayTrigger, Popover, Button } from "react-bootstrap";
 import { PersonCircle } from "react-bootstrap-icons";
 import "../App.css";
-import { findAllByTestId } from "@testing-library/react";
 
 export default function ProfileManager() {
   const [loginModalShow, setLoginModalShow] = useState(false);

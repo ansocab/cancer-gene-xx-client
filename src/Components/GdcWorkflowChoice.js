@@ -8,7 +8,7 @@ export default function GdcWorkflowChoice(props) {
   const [uniqueWorkflow, setUniqueWorkflow] = useState([]);
   const [selectedWorkflow, setSelectedWorkflow] = useState([]);
   //const [startDataFetch, setStartDataFetch] = useState(false);
-  const { setSearchSummary } = useContext(SearchContext);
+  const { setSearchSummary, setLoadingResults } = useContext(SearchContext);
 
   function getGdcWorkflows() {
     fetch("https://api.gdc.cancer.gov/v0/graphql", {
@@ -108,6 +108,8 @@ export default function GdcWorkflowChoice(props) {
       workflow: selectedWorkflow,
     };
 
+    console.log(summary);
+
     if (selectedWorkflow.length !== 0) {
       setSearchSummary(summary);
     } else if (
@@ -116,6 +118,8 @@ export default function GdcWorkflowChoice(props) {
     ) {
       setSearchSummary(summary);
     }
+
+    setLoadingResults(true);
   };
 
   return (
@@ -150,7 +154,7 @@ export default function GdcWorkflowChoice(props) {
         )}
       </Col>
       <Col md={{ span: 6, offset: 6 }} xl={{ span: 3, offset: 9 }}>
-        <Button onClick={handleClick} className=" my-4">
+        <Button onClick={handleClick} className="my-4">
           Get Data
         </Button>
       </Col>
