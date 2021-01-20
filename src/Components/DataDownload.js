@@ -1,15 +1,15 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 // import download from "downloadjs";
-import untar from 'js-untar'
-import BoxPlot from './BoxPlot'
-import BoxPlotModal from './BoxPlotModal'
-import CollapsableCard from './CollapsableCard'
-import { SearchContext } from '../Helpers/search'
-import Loading from './Loading'
-import {Modal, Button } from "react-bootstrap";
+import untar from "js-untar";
+import BoxPlot from "./BoxPlot";
+import BoxPlotModal from "./BoxPlotModal";
+import CollapsableCard from "./CollapsableCard";
+import { SearchContext } from "../Helpers/search";
+import Loading from "./Loading";
+import { Modal, Button } from "react-bootstrap";
 import "../App.css";
-import { merge } from 'd3v4'
+import { merge } from "d3v4";
 
 // const extract = require("extract-zip");
 const pako = require("pako");
@@ -20,17 +20,20 @@ const pako = require("pako");
 // for each ungzipped file, find the correct line of text, save to object with key=filename, value=value of matching
 
 export default function DataDownload(props) {
-	const { ensgNumber } = useParams()
-	const [results, setResults] = useState([])
-	const [boxPlotValues, setBoxPlotValues] = useState([])
-	
-	const [caseIds, setCaseIds] = useState([])
+  const { ensgNumber } = useParams();
+  const [results, setResults] = useState([]);
+  const [boxPlotValues, setBoxPlotValues] = useState([]);
 
-	
-	const { cancerData, setCancerData, loadingResults,
-    setLoadingResults, } = useContext(SearchContext)
-	const [boxPlotModalShow, setBoxPlotModalShow] = useState(false);
+  const [caseIds, setCaseIds] = useState([]);
 
+  const {
+    cancerData,
+    setCancerData,
+    loadingResults,
+    setLoadingResults,
+    showPlot,
+  } = useContext(SearchContext);
+  const [boxPlotModalShow, setBoxPlotModalShow] = useState(false);
 
   const unarchive = async function (files) {
     let unzippedFiles = [];
@@ -224,71 +227,62 @@ export default function DataDownload(props) {
     setBoxPlotValues(helperArray.map((i) => Number(i)));
   }
 
-
-
-	
-
-	 
-
-		
-		const handleClick1 = (e) => {
-			setBoxPlotModalShow(true)
-			};
-
-		
-		
+  const handleClick1 = (e) => {
+    setBoxPlotModalShow(true);
+  };
 
   return (
     <div>
       <CollapsableCard title={`Results for ${ensgNumber}`}>
-{!loadingResults ? (
-  <>
-	  <Button onClick={handleClick1} className=" my-4">
-          Get Box Plot
-        </Button>
-	
-   <BoxPlotModal boxplotModalShow={boxPlotModalShow} cancerData={cancerData}/>
-        {Object.keys(cancerData).length !== 0 && (
-          <div style={{ overflowX: "auto" }}>
-            <table className="table table-hover">
-              <thead>
-                <tr className="table-primary">
-                  <th scope="col">File ID</th>
-                  <th scope="col">FPKM of {ensgNumber}</th>
-                  <th scope="col">Case ID</th>
-                  <th scope="col">Vital Status</th>
-                  <th scope="col">Days to Death</th>
-                  <th scope="col">Gender</th>
-                  <th scope="col">Tumor Grade</th>
-                  <th scope="col">Tumor Stage</th>  
-                </tr>
-              </thead>
-              <tbody>
-                {cancerData.data.map((r) => (
-                  <tr>
-                    <td>{r.file_id}</td>
-                    <td>{r.gene_value}</td>
-                    <td>{r.case_id}</td>
-                    <td>{r.vital_status}</td>
-                    <td>{r.days_to_death}</td>
-                    <td>{r.gender}</td>
-                    <td>{r.tumor_grade}</td>
-                    <td>{r.tumor_stage}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+        {!loadingResults ? (
+          <>
+            <Button onClick={handleClick1} className=" my-4">
+              Get Box Plot
+            </Button>
+
+            <BoxPlotModal
+              boxPlotModalShow={boxPlotModalShow}
+              cancerData={cancerData}
+              callback={() => setBoxPlotModalShow(false)}
+            />
+            {Object.keys(cancerData).length !== 0 && (
+              <div style={{ overflowX: "auto" }}>
+                <table className="table table-hover">
+                  <thead>
+                    <tr className="table-primary">
+                      <th scope="col">File ID</th>
+                      <th scope="col">FPKM of {ensgNumber}</th>
+                      <th scope="col">Case ID</th>
+                      <th scope="col">Vital Status</th>
+                      <th scope="col">Days to Death</th>
+                      <th scope="col">Gender</th>
+                      <th scope="col">Tumor Grade</th>
+                      <th scope="col">Tumor Stage</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {cancerData.data.map((r) => (
+                      <tr>
+                        <td>{r.file_id}</td>
+                        <td>{r.gene_value}</td>
+                        <td>{r.case_id}</td>
+                        <td>{r.vital_status}</td>
+                        <td>{r.days_to_death}</td>
+                        <td>{r.gender}</td>
+                        <td>{r.tumor_grade}</td>
+                        <td>{r.tumor_stage}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </>
         ) : (
           <Loading topMargin="0" />
         )}
       </CollapsableCard>
-      {/* {!loadingResults && showPlot && (
-       <BoxPlot categorySet = {categorySet} selectedSort={selectedSort} cancerData={cancerData} />
-      )} */}
+      {showPlot && <BoxPlot cancerData={cancerData} />}
     </div>
   );
 }
-

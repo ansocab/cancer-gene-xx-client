@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, Button } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { UserContext } from "../Helpers/user";
+import { SearchContext } from "../Helpers/search";
 import CollapsableCard from "./CollapsableCard";
-import BoxPlot from './BoxPlot'
+import BoxPlot from "./BoxPlot";
+import BoxPlotModal from "./BoxPlotModal";
 import Loading from "./Loading";
 import "../App.css";
 
@@ -12,6 +14,8 @@ export default function SavedSearchesDetail() {
   const [currentSearch, setCurrentSearch] = useState({});
   const [cancerData, setCancerData] = useState([]);
   const { serverUrl } = useContext(UserContext);
+  const { showPlot } = useContext(SearchContext);
+  const [boxPlotModalShow, setBoxPlotModalShow] = useState(false);
 
   useEffect(() => {
     console.log(typeof cancerData);
@@ -73,6 +77,10 @@ export default function SavedSearchesDetail() {
     return formattedDate.toLocaleDateString();
   };
 
+  const handleClick1 = (e) => {
+    setBoxPlotModalShow(true);
+  };
+
   return (
     <>
       {Object.keys(cancerData).length !== 0 ? (
@@ -113,7 +121,17 @@ export default function SavedSearchesDetail() {
               </Col>
             </Row>
           </div>
+
           <CollapsableCard title={`Results for ${currentSearch.ensg_number}`}>
+            <Button onClick={handleClick1} className=" my-4">
+              Get Box Plot
+            </Button>
+
+            <BoxPlotModal
+              boxPlotModalShow={boxPlotModalShow}
+              cancerData={cancerData}
+              callback={() => setBoxPlotModalShow(false)}
+            />
             <div style={{ overflowX: "auto" }}>
               <table className="table table-hover">
                 <thead>
@@ -145,11 +163,11 @@ export default function SavedSearchesDetail() {
               </table>
             </div>
           </CollapsableCard>
-         {/*  <BoxPlot cancerData={cancerData} /> */}
         </div>
       ) : (
         <Loading topMargin="3em" />
       )}
+      {showPlot && <BoxPlot cancerData={cancerData} />}
     </>
   );
 }
