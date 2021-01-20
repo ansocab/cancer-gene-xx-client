@@ -5,10 +5,14 @@ import CollapsableCard from './CollapsableCard'
 
 export default function Boxplot(props) {
 	function buildPlot() {
-		console.log(props.cancerData)
+		var sort = props.selectedSort
+		var category = props.categorySet
+
+		console.log(props.categorySet)
+		console.log (category)
 		// set the dimensions and margins of the graph
 		var margin = { top: 10, right: 30, bottom: 30, left: 40 },
-			width = 460 - margin.left - margin.right,
+			width = (category.length * 150) + 60 - margin.left - margin.right,
 			height = 400 - margin.top - margin.bottom
 
     // append the svg object to the body of the page
@@ -27,7 +31,7 @@ export default function Boxplot(props) {
 		var sumstat = d3
 			.nest() // nest function allows to group the calculation per level of a factor
 			.key(function (d) {
-				return d.gender
+				return d[sort]
 			})
 			.rollup(function (d) {
 				var q1 = d3.quantile(
@@ -69,10 +73,15 @@ export default function Boxplot(props) {
 			.entries(props.cancerData.data)
 
 		// Show the X scale
+
+		
+			
+		  
+
 		var x = d3
 			.scaleBand()
 			.range([0, width])
-			.domain(['male', 'female'])
+			.domain(category)
 			.paddingInner(1)
 			.paddingOuter(0.5)
 		svg
@@ -162,7 +171,7 @@ export default function Boxplot(props) {
 			.enter()
 			.append('circle')
 			.attr('cx', function (d) {
-				return x(d.gender) - jitterWidth / 2 + Math.random() * jitterWidth
+				return x(d[sort]) - jitterWidth / 2 + Math.random() * jitterWidth
 			})
 			.attr('cy', function (d) {
 				return y(d.gene_value)
@@ -174,7 +183,7 @@ export default function Boxplot(props) {
 
   useEffect(() => {
     buildPlot();
-  }, []);
+  }, [props.categorySet]);
 
   return (
     <CollapsableCard title="Box Plot">

@@ -1,12 +1,14 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 // import download from "downloadjs";
-import untar from "js-untar";
-import BoxPlot from "./BoxPlot";
-import CollapsableCard from "./CollapsableCard";
-import { SearchContext } from "../Helpers/search";
-import Loading from "./Loading";
-import { merge } from "d3v4";
+import untar from 'js-untar'
+import BoxPlot from './BoxPlot'
+import CollapsableCard from './CollapsableCard'
+import { SearchContext } from '../Helpers/search'
+import Loading from './Loading'
+import {Modal, Button } from "react-bootstrap";
+import "../App.css";
+import { merge } from 'd3v4'
 
 // const extract = require("extract-zip");
 const pako = require("pako");
@@ -17,17 +19,18 @@ const pako = require("pako");
 // for each ungzipped file, find the correct line of text, save to object with key=filename, value=value of matching
 
 export default function DataDownload(props) {
-  const { ensgNumber } = useParams();
-  const [results, setResults] = useState([]);
-  const [boxPlotValues, setBoxPlotValues] = useState([]);
-  const [caseIds, setCaseIds] = useState([]);
-  //const [loading, setLoading] = useState(true);
-  const {
-    cancerData,
-    setCancerData,
-    loadingResults,
-    setLoadingResults,
-  } = useContext(SearchContext);
+	const { ensgNumber } = useParams()
+	const [results, setResults] = useState([])
+	const [boxPlotValues, setBoxPlotValues] = useState([])
+	const [selectedSort, setSelectedSort] = useState([]);
+	const [caseIds, setCaseIds] = useState([])
+	const [categorySet, setCategorySet] = useState([])
+	const [showButton, setShowButton] = useState(false);
+	const [showPlot, setShowPlot] = useState(false);
+	const { cancerData, setCancerData, loadingResults,
+    setLoadingResults, } = useContext(SearchContext)
+	const [boxPlotModalShow, setBoxPlotModalShow] = useState(false);
+
 
   const unarchive = async function (files) {
     let unzippedFiles = [];
@@ -86,13 +89,14 @@ export default function DataDownload(props) {
 						  edges {
 							node {
 							 file_id
-							 data_category
+						
 						  data_type
 						  cases{
 							hits(first: 1000,){
 							  edges{
 								node{
 								  case_id
+								
 								}
 							  }
 							}
@@ -220,10 +224,129 @@ export default function DataDownload(props) {
     setBoxPlotValues(helperArray.map((i) => Number(i)));
   }
 
+	const handleChange = (e) => {
+		
+		if (e.target.checked) {
+			setSelectedSort(e.target.id)
+			setShowButton(true)
+			
+		} else {
+		  setShowButton(false);
+		  setSelectedSort("")
+		}
+	  };
+
+	  const makeCategories = () =>{
+		console.log (selectedSort.length)
+		let helperSet = new Set();
+		cancerData.data.map((categories) => helperSet.add(categories[selectedSort]));
+  		 helperSet.delete('not reported')
+  		 setCategorySet(Array.from(helperSet))
+   console.log(helperSet)
+	  }
+
+	  const handleClick = (e) => {
+		setShowPlot(true)
+		setBoxPlotModalShow(false)
+		};
+
+		
+		const handleClick1 = (e) => {
+			setBoxPlotModalShow(true)
+			};
+
+		useEffect(() => {
+			console.log (selectedSort.length)
+			selectedSort.length && makeCategories()
+		}, [selectedSort])
+		
+
   return (
     <div>
       <CollapsableCard title={`Results for ${ensgNumber}`}>
-        {!loadingResults ? (
+{!loadingResults ? (
+  <>
+	  <Button onClick={handleClick1} className=" my-4">
+          Get Box Plot
+        </Button>
+		<Modal
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+        className="justify-content-md-center"
+        show={boxPlotModalShow}
+        onHide={() => setBoxPlotModalShow(false)}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">Create Boxplot</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Choose category to sort the data by:
+		  <fieldset>
+            <div className="form-group">
+			<div className="custom-control custom-checkbox">
+		  <input
+                      type="checkbox"
+                      className="custom-control-input"
+                      id="vital_status"
+                      onChange={handleChange}
+                    />
+                    <label
+                      className="custom-control-label"
+                      for="vital_status"
+                    >
+                      Vital Status
+                    </label>
+					</div>
+					<div className="custom-control custom-checkbox">
+					<input
+                      type="checkbox"
+                      className="custom-control-input"
+                      id="gender"
+                      onChange={handleChange}
+                    />
+                    <label
+                      className="custom-control-label"
+                      for="gender"
+                    >
+                     Gender
+                    </label>
+					</div> <div className="custom-control custom-checkbox">
+					<input
+                      type="checkbox"
+                      className="custom-control-input"
+                      id="tumor_grade"
+                      onChange={handleChange}
+                    />
+                    <label
+                      className="custom-control-label"
+                      for="tumor_grade"
+                    >
+                      Tumor Grade
+                    </label>
+					</div> <div className="custom-control custom-checkbox">
+					<input
+                      type="checkbox"
+                      className="custom-control-input"
+                      id="tumor_stage"
+                      onChange={handleChange}
+                    />
+                    <label
+                      className="custom-control-label"
+                      for="tumor_stage"
+                    >
+                     Tumor Stage
+                    </label>
+					</div>
+					</div>
+					</fieldset>
+					{showButton &&
+	  <Button onClick={handleClick} className=" my-4">
+          Get Box Plot
+        </Button>}
+
+        </Modal.Body>
+      </Modal>
+        {Object.keys(cancerData).length !== 0 && (
           <div style={{ overflowX: "auto" }}>
             <table className="table table-hover">
               <thead>
@@ -235,7 +358,7 @@ export default function DataDownload(props) {
                   <th scope="col">Days to Death</th>
                   <th scope="col">Gender</th>
                   <th scope="col">Tumor Grade</th>
-                  <th scope="col">Tumor Stage</th>
+                  <th scope="col">Tumor Stage</th>  
                 </tr>
               </thead>
               <tbody>
@@ -254,12 +377,14 @@ export default function DataDownload(props) {
               </tbody>
             </table>
           </div>
+        )}
+          </>
         ) : (
           <Loading topMargin="0" />
         )}
       </CollapsableCard>
-      {!loadingResults && boxPlotValues.length !== 0 && (
-        <BoxPlot cancerData={cancerData} />
+      {!loadingResults && showPlot && (
+        <BoxPlot categorySet = {categorySet} selectedSort={selectedSort} cancerData={cancerData} />
       )}
     </div>
   );
