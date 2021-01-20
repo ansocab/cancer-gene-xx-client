@@ -73,7 +73,7 @@ export default function ProfileManager() {
             <Popover.Title as="h3">
               {user !== null
                 ? `Logged in as ${user.name}`
-                : "New to BestNameEver? Create an account"}
+                : "New to TCGA Searcher? Create an account"}
             </Popover.Title>
             <Popover.Content>
               <div className="text-right">

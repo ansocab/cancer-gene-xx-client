@@ -63,7 +63,7 @@ export default function LoginForm({ callback }) {
         className="mt-4 text-info link-style"
         onClick={() => callback("goToRegister")}
       >
-        New to BestNameEver? Register here
+        New to TCGA Searcher? Register here
       </p>
     </>
   );
