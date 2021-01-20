@@ -145,7 +145,7 @@ export default function SavedSearchesDetail() {
               </table>
             </div>
           </CollapsableCard>
-          <BoxPlot cancerData={cancerData} />
+         {/*  <BoxPlot cancerData={cancerData} /> */}
         </div>
       ) : (
         <Loading topMargin="3em" />
