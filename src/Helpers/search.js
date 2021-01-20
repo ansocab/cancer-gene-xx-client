@@ -7,6 +7,9 @@ export const SearchProvider = ({ children }) => {
   const [cancerData, setCancerData] = useState([]);
   const [loadingResults, setLoadingResults] = useState(true);
   const [onDataClose, setOnDataClose] = useState(false);
+  const [selectedSort, setSelectedSort] = useState("");
+  const [categorySet, setCategorySet] = useState([]);
+  const [showPlot, setShowPlot] = useState(false);
 
   return (
     <SearchContext.Provider
@@ -19,6 +22,12 @@ export const SearchProvider = ({ children }) => {
         setLoadingResults,
         onDataClose,
         setOnDataClose,
+        selectedSort,
+        setSelectedSort,
+        categorySet,
+        setCategorySet,
+        showPlot,
+        setShowPlot,
       }}
     >
       {children}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import { SearchContext } from "../Helpers/search";
 import { Collapse } from "react-bootstrap";
 import { ChevronDown, ChevronUp } from "react-bootstrap-icons";
@@ -12,7 +12,6 @@ export default function CollapsableCard(props) {
     if (props.closeOnData) {
       setOpen(!onDataClose);
     }
-    console.log("HERE! " + onDataClose);
   }, [onDataClose]);
 
   const handleClick = () => {
