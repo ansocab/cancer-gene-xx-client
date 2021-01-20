@@ -70,7 +70,7 @@ export default function GdcProjectChoice() {
   };
 
   return (
-    <CollapsableCard title="Data Selection">
+    <CollapsableCard title="Data Selection" closeOnData={true}>
       <Row className="justify-content-start choice-container">
         <Col md="6" xl="3">
           <h4>Projects</h4>

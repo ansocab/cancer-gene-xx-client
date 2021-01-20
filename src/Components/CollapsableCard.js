@@ -1,17 +1,31 @@
-import React, { useState } from "react";
-import { Button, Collapse } from "react-bootstrap";
+import React, { useEffect, useState, useContext } from "react";
+import { SearchContext } from "../Helpers/search";
+import { Collapse } from "react-bootstrap";
 import { ChevronDown, ChevronUp } from "react-bootstrap-icons";
 import "bootswatch/dist/flatly/bootstrap.min.css";
 
 export default function CollapsableCard(props) {
   const [open, setOpen] = useState(true);
+  const { onDataClose, setOnDataClose } = useContext(SearchContext);
+
+  useEffect(() => {
+    if (props.closeOnData) {
+      setOpen(!onDataClose);
+    }
+    console.log("HERE! " + onDataClose);
+  }, [onDataClose]);
+
+  const handleClick = () => {
+    setOpen(!open);
+    setOnDataClose(false);
+  };
 
   return (
     <>
       <div className="card mb-2 mt-4" style={{ borderColor: "#2c3e50" }}>
         <div
           className="card-header"
-          onClick={() => setOpen(!open)}
+          onClick={handleClick}
           aria-controls="example-collapse-text"
           aria-expanded={open}
         >
