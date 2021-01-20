@@ -9,7 +9,7 @@ export default function DataFetch(props) {
 
   useEffect(() => {
     getDataFetchManifest();
-  }, []);
+  }, [searchSummary]);
 
   function getDataFetchManifest() {
     let searchArray = [
