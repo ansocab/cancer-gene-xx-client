@@ -8,7 +8,9 @@ export default function GdcWorkflowChoice(props) {
   const [uniqueWorkflow, setUniqueWorkflow] = useState([]);
   const [selectedWorkflow, setSelectedWorkflow] = useState([]);
   //const [startDataFetch, setStartDataFetch] = useState(false);
-  const { setSearchSummary, setLoadingResults } = useContext(SearchContext);
+  const { setSearchSummary, setLoadingResults, setOnDataClose } = useContext(
+    SearchContext
+  );
 
   function getGdcWorkflows() {
     fetch("https://api.gdc.cancer.gov/v0/graphql", {
@@ -120,6 +122,7 @@ export default function GdcWorkflowChoice(props) {
     }
 
     setLoadingResults(true);
+    setOnDataClose(true);
   };
 
   return (

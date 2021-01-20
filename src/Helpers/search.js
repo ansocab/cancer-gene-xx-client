@@ -6,6 +6,7 @@ export const SearchProvider = ({ children }) => {
   const [searchSummary, setSearchSummary] = useState({});
   const [cancerData, setCancerData] = useState([]);
   const [loadingResults, setLoadingResults] = useState(true);
+  const [onDataClose, setOnDataClose] = useState(false);
 
   return (
     <SearchContext.Provider
@@ -16,6 +17,8 @@ export const SearchProvider = ({ children }) => {
         setCancerData,
         loadingResults,
         setLoadingResults,
+        onDataClose,
+        setOnDataClose,
       }}
     >
       {children}
