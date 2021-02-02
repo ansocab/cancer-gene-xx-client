@@ -13,13 +13,13 @@ export default function Navigation() {
       <Navbar.Collapse id="navbarColor02">
         <Nav className="mr-auto navbar-nav">
           <Nav.Link className="nav-link" href="/">
-            Home
+            New search
           </Nav.Link>
           <Nav.Link
             className={`nav-link ${!user && "disabled"}`}
             href="/savedsearches"
           >
-            Searches
+            History
           </Nav.Link>
           <Nav.Link className="nav-link" href="#">
             About

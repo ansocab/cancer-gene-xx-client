@@ -1,7 +1,12 @@
 .App {
   width: 100%;
-  min-height: 100vh;
-  background-color: #ecf0f1;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-container {
+  flex: 1 0 auto;
 }
 
 .ensg-search-container {
@@ -62,14 +67,20 @@
   margin: auto 5px;
 }
 
+.vertical-line-footer {
+  border-left: 1.5px solid white;
+  height: 25px;
+  margin: auto 10px;
+}
+
 .custom-checkbox input[type="checkbox"]:disabled + label:before {
   border-color: #eee;
   color: #ccc;
   background: white;
 }
 
-.list-icons svg {
-  transform: scale(1.2);
+.custom-list-item svg {
+  transform: scale(1.1);
   pointer-events: none;
 }
 
@@ -100,7 +111,24 @@
   box-shadow: none;
 }
 
-/* button {
-  outline: none !important;
+/* FOOTER */
+footer {
+  flex-shrink: 0;
+  height: 4em;
+  margin-top: 3em;
+  color: white;
+  background-color: #7b8a8b;
+}
+
+footer a {
+  color: white;
+}
+
+footer a:hover {
+  color: #212529;
+}
+
+/* GENERAL */
+button:focus {
   box-shadow: none !important;
-} */
+}

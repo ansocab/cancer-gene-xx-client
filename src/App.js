@@ -7,6 +7,7 @@ import SavedSearches from "./Components/SavedSearches";
 import SavedSearchesDetail from "./Components/SavedSearchesDetail";
 import SaveSearch from "./Components/SaveSearch";
 import Navigation from "./Components/Navigation";
+import Footer from "./Components/Footer";
 import DataFetch from "./Components/DataFetch";
 import { Container } from "react-bootstrap";
 import "bootswatch/dist/flatly/bootstrap.min.css";
@@ -18,7 +19,7 @@ function App() {
   return (
     <div className="App">
       <Navigation />
-      <Container>
+      <Container className="main-container">
         <Switch>
           <Route exact path="/">
             <EnsgSearch />
@@ -40,6 +41,7 @@ function App() {
           </Route>
         </Switch>
       </Container>
+      <Footer />
     </div>
   );
 }

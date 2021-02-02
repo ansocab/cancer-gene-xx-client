@@ -184,8 +184,8 @@ export default function SavedSearches() {
 
   return (
     <div style={{ margin: "20px" }}>
-      <h2 className="dark-blue">Your searches</h2>
-      <Form.Label as="legend">Search</Form.Label>
+      <h2 className="dark-blue mb-3">History</h2>
+      <Form.Label as="legend">Filter:</Form.Label>
       <Form className="d-flex mb-3" onSubmit={handleSearchSubmit}>
         <Row className="w-100">
           <Col xs={12} lg={3}>
