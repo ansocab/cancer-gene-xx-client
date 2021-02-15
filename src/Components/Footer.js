@@ -7,7 +7,7 @@ export default function Footer() {
       <span>{`© 2021 Svenja Niehus & Ana Caballero`}</span>
       <div className="vertical-line-footer"></div>
       <span className="mr-2">Code:</span>
-      <span>
+      <span style={{ height: "25px" }}>
         <a
           href="https://github.com/ansocab/cancer-gene-xx-client"
           target="_blank"

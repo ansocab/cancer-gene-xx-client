@@ -11,6 +11,7 @@ export default function ProfileManager() {
   const [loginModalShow, setLoginModalShow] = useState(false);
   const [registerModalShow, setRegisterModalShow] = useState(false);
   const [showOverlay, setShowOverlay] = useState(false);
+  const [isActive, setIsActive] = useState(false);
   const { user, setUser, serverUrl } = useContext(UserContext);
   const history = useHistory();
 
@@ -59,15 +60,28 @@ export default function ProfileManager() {
       .catch((err) => console.log(err));
   };
 
+  const handleProfileButtonClick = () => {
+    if (isActive) {
+      document.activeElement.blur();
+      setIsActive(false);
+    } else {
+      setIsActive(true);
+    }
+  };
+
   return (
     <>
       <OverlayTrigger
-        trigger="click"
+        trigger="focus"
         key="bottom"
         placement="auto"
+        /*  
+        rootClose={true}
         rootClose={true}
         show={showOverlay}
-        onHide={() => setShowOverlay(!showOverlay)}
+                show={showOverlay} 
+        onHide={() => console.log("hello")} */
+        onHide={() => console.log("hello")}
         overlay={
           <Popover id="popover-positioned-bottom" className="mv-25">
             <Popover.Title as="h3">
@@ -114,8 +128,12 @@ export default function ProfileManager() {
       >
         <Button
           variant="secondary"
+          name="profileButton"
           className="profile-button mr-2 px-1 px-md-2"
-          onClick={() => setShowOverlay(!showOverlay)}
+          onBlur={(e) => {
+            setIsActive(false);
+          }}
+          onClick={handleProfileButtonClick}
         >
           <PersonCircle size={23} />
         </Button>

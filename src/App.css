@@ -104,11 +104,12 @@
   background-color: transparent;
 }
 
-.profile-button:focus {
-  color: #212529;
-  background-color: transparent;
-  border-color: transparent;
-  box-shadow: none;
+.profile-button:focus,
+.profile-button:active {
+  color: #212529 !important;
+  background-color: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
 }
 
 /* FOOTER */
