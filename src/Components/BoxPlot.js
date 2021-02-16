@@ -5,7 +5,9 @@ import * as d3 from "d3v4";
 import CollapsableCard from "./CollapsableCard";
 
 export default function Boxplot(props) {
-  const { selectedSort, categorySet } = useContext(SearchContext);
+  const { selectedSort, categorySet, openBoxPlot, setOpenBoxPlot } = useContext(
+    SearchContext
+  );
 
   function buildPlot() {
     var sort = selectedSort;
@@ -186,8 +188,12 @@ export default function Boxplot(props) {
     buildPlot();
   }, [categorySet]);
 
+  const switchOpen = () => {
+    setOpenBoxPlot(!openBoxPlot);
+  };
+
   return (
-    <CollapsableCard title="Box Plot">
+    <CollapsableCard title="Box Plot" open={openBoxPlot} callback={switchOpen}>
       <div style={{ overflowX: "auto" }}>
         <div className="card-text" id="my_dataviz"></div>
       </div>

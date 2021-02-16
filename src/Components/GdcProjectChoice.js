@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import GdcCategoryChoice from "./GdcCategoryChoice";
 import CollapsableCard from "./CollapsableCard";
+import { SearchContext } from "../Helpers/search";
 import { Row, Col } from "react-bootstrap";
 import "../App.css";
 
@@ -8,6 +9,7 @@ export default function GdcProjectChoice() {
   const [gdcProjects, setGdcProjects] = useState([]);
   const [selectedProjects, setSelectedProjects] = useState([]);
   const [showCategory, setShowCategory] = useState(false);
+  const { openDataSelection, setOpenDataSelection } = useContext(SearchContext);
 
   function getGdcProjects() {
     fetch("https://api.gdc.cancer.gov/v0/graphql", {
@@ -69,8 +71,17 @@ export default function GdcProjectChoice() {
     }
   };
 
+  const switchOpen = () => {
+    setOpenDataSelection(!openDataSelection);
+  };
+
   return (
-    <CollapsableCard title="Data Selection" closeOnData={true}>
+    <CollapsableCard
+      title="Data Selection"
+      closeOnData={true}
+      open={openDataSelection}
+      callback={switchOpen}
+    >
       <Row className="justify-content-start choice-container">
         <Col md="6" xl="3">
           <h4>Projects</h4>

@@ -6,7 +6,9 @@ export const SearchProvider = ({ children }) => {
   const [searchSummary, setSearchSummary] = useState({});
   const [cancerData, setCancerData] = useState([]);
   const [loadingResults, setLoadingResults] = useState(true);
-  const [onDataClose, setOnDataClose] = useState(false);
+  const [openDataSelection, setOpenDataSelection] = useState(true);
+  const [openResults, setOpenResults] = useState(false);
+  const [openBoxPlot, setOpenBoxPlot] = useState(false);
   const [selectedSort, setSelectedSort] = useState("");
   const [categorySet, setCategorySet] = useState([]);
   const [showPlot, setShowPlot] = useState(false);
@@ -20,8 +22,12 @@ export const SearchProvider = ({ children }) => {
         setCancerData,
         loadingResults,
         setLoadingResults,
-        onDataClose,
-        setOnDataClose,
+        openDataSelection,
+        setOpenDataSelection,
+        openResults,
+        setOpenResults,
+        openBoxPlot,
+        setOpenBoxPlot,
         selectedSort,
         setSelectedSort,
         categorySet,

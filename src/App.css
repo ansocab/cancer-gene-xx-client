@@ -43,6 +43,10 @@
   margin-top: auto;
 }
 
+.custom-collapsable-card-header:hover {
+  cursor: pointer;
+}
+
 /*SEARCHES LIST*/
 .custom-list-group h5,
 .custom-list-group h6,
