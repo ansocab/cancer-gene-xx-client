@@ -121,22 +121,22 @@ export default function SavedSearches() {
         break;
       case "Projects":
         filtered = userSearches.filter((element) =>
-          element.project.includes(term)
+          element.project.join().toLowerCase().includes(term.toLowerCase())
         );
         break;
       case "Categories":
         filtered = userSearches.filter((element) =>
-          element.category.includes(term)
+          element.category.join().toLowerCase().includes(term.toLowerCase())
         );
         break;
       case "Data Type":
         filtered = userSearches.filter((element) =>
-          element.data_type.includes(term)
+          element.data_type.join().toLowerCase().includes(term.toLowerCase())
         );
         break;
       case "Workflow":
         filtered = userSearches.filter((element) =>
-          element.workflow.includes(term)
+          element.workflow.join().toLowerCase().includes(term.toLowerCase())
         );
         break;
       default:
@@ -228,14 +228,14 @@ export default function SavedSearches() {
               .map((search) => (
                 <div className="list-group-item list-group-item-action flex-column align-items-start mb-3 custom-list-item">
                   <div className="d-flex w-100 justify-content-between mb-3">
-                    <Row className="d-flex">
+                    <Row className="d-flex custom-width-100">
                       <Col xs="7" md="auto" className="d-flex pl-md-0">
                         <div className="vertical-line d-none d-md-block"></div>
                         <h6 className="mt-auto mb-auto">
                           {search.ensg_number}
                         </h6>
                       </Col>
-                      <Col xs="5" md="auto">
+                      <Col xs="auto pr-1" md="auto ml-auto pr-1">
                         <OverlayTrigger
                           key="top-pin"
                           placement="top"
@@ -337,7 +337,9 @@ export default function SavedSearches() {
                     >
                       Show data
                     </button>
-                    <p>{formatDate(search.createdAt)}</p>
+                    <p style={{ margin: "auto 0" }}>
+                      {formatDate(search.createdAt)}
+                    </p>
                   </div>
                 </div>
               ))

@@ -31,6 +31,8 @@ export default function DataDownload(props) {
     setCancerData,
     loadingResults,
     setLoadingResults,
+    openResults,
+    setOpenResults,
     showPlot,
   } = useContext(SearchContext);
   const [boxPlotModalShow, setBoxPlotModalShow] = useState(false);
@@ -231,9 +233,17 @@ export default function DataDownload(props) {
     setBoxPlotModalShow(true);
   };
 
+  const switchOpen = () => {
+    setOpenResults(!openResults);
+  };
+
   return (
     <div>
-      <CollapsableCard title={`Results for ${ensgNumber}`}>
+      <CollapsableCard
+        title={`Results for ${ensgNumber}`}
+        open={openResults}
+        callback={switchOpen}
+      >
         {!loadingResults ? (
           <>
             <Button onClick={handleClick1} className=" my-4">

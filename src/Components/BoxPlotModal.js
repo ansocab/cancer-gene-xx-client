@@ -13,6 +13,8 @@ export default function BoxPlotModal(props) {
     setCategorySet,
     showPlot,
     setShowPlot,
+    setOpenResults,
+    setOpenBoxPlot,
   } = useContext(SearchContext);
 
   useEffect(() => {
@@ -20,7 +22,6 @@ export default function BoxPlotModal(props) {
   }, [props.boxPlotModalShow]);
 
   const handleHide = () => {
-    console.log(showPlot);
     setShowModal(false);
     props.callback();
   };
@@ -37,6 +38,8 @@ export default function BoxPlotModal(props) {
 
   const handleClick = (e) => {
     setShowPlot(true);
+    setOpenResults(false);
+    setOpenBoxPlot(true);
     handleHide();
   };
 

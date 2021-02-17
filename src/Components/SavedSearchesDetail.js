@@ -14,7 +14,7 @@ export default function SavedSearchesDetail() {
   const [currentSearch, setCurrentSearch] = useState({});
   const [cancerData, setCancerData] = useState([]);
   const { serverUrl } = useContext(UserContext);
-  const { showPlot } = useContext(SearchContext);
+  const { showPlot, openResults, setOpenResults } = useContext(SearchContext);
   const [boxPlotModalShow, setBoxPlotModalShow] = useState(false);
 
   useEffect(() => {
@@ -53,6 +53,7 @@ export default function SavedSearchesDetail() {
         })
         .catch((err) => console.log(err));
     }
+    setOpenResults(true);
   }, [currentSearch]);
 
   const getCheckboxList = (id, text) => {
@@ -79,6 +80,10 @@ export default function SavedSearchesDetail() {
 
   const handleClick1 = (e) => {
     setBoxPlotModalShow(true);
+  };
+
+  const switchOpen = () => {
+    setOpenResults(!openResults);
   };
 
   return (
@@ -122,7 +127,11 @@ export default function SavedSearchesDetail() {
             </Row>
           </div>
 
-          <CollapsableCard title={`Results for ${currentSearch.ensg_number}`}>
+          <CollapsableCard
+            title={`Results for ${currentSearch.ensg_number}`}
+            open={openResults}
+            callback={switchOpen}
+          >
             <Button onClick={handleClick1} className=" my-4">
               Get Box Plot
             </Button>

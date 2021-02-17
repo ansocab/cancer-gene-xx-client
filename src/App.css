@@ -43,6 +43,10 @@
   margin-top: auto;
 }
 
+.custom-collapsable-card-header:hover {
+  cursor: pointer;
+}
+
 /*SEARCHES LIST*/
 .custom-list-group h5,
 .custom-list-group h6,
@@ -104,11 +108,12 @@
   background-color: transparent;
 }
 
-.profile-button:focus {
-  color: #212529;
-  background-color: transparent;
-  border-color: transparent;
-  box-shadow: none;
+.profile-button:focus,
+.profile-button:active {
+  color: #212529 !important;
+  background-color: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
 }
 
 /* FOOTER */
@@ -131,4 +136,8 @@ footer a:hover {
 /* GENERAL */
 button:focus {
   box-shadow: none !important;
+}
+
+.custom-width-100 {
+  width: 100vw;
 }

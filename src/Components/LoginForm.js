@@ -1,4 +1,4 @@
-import { useRef, useContext } from "react";
+import { useRef, useContext, useState } from "react";
 import { Form, Button } from "react-bootstrap";
 import { UserContext } from "../Helpers/user";
 
@@ -6,6 +6,7 @@ export default function LoginForm({ callback }) {
   const emailValue = useRef();
   const passwordValue = useRef();
   const { serverUrl, setUser } = useContext(UserContext);
+  const [showLoginError, setShowLoginError] = useState(false);
 
   const login = (mail, pw) => {
     fetch(`${serverUrl}/login`, {
@@ -24,6 +25,7 @@ export default function LoginForm({ callback }) {
           callback("loggedIn");
         } else {
           console.log(res);
+          setShowLoginError(true);
         }
       })
       .catch((err) => console.log(err));
@@ -54,6 +56,13 @@ export default function LoginForm({ callback }) {
             ref={passwordValue}
           />
         </Form.Group>
+
+        {showLoginError && (
+          <p className="text-danger">
+            Sorry, we couldn't log you in. Please check the correct spelling of
+            your username and password and try again.
+          </p>
+        )}
 
         <Button variant="primary" type="submit">
           Submit
