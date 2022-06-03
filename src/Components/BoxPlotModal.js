@@ -80,7 +80,7 @@ export default function BoxPlotModal(props) {
                 id="vital_status"
                 onChange={handleChange}
               />
-              <label className="custom-control-label" for="vital_status">
+              <label className="custom-control-label" htmlFor="vital_status">
                 Vital Status
               </label>
             </div>
@@ -91,7 +91,7 @@ export default function BoxPlotModal(props) {
                 id="gender"
                 onChange={handleChange}
               />
-              <label className="custom-control-label" for="gender">
+              <label className="custom-control-label" htmlFor="gender">
                 Gender
               </label>
             </div>{" "}
@@ -102,7 +102,7 @@ export default function BoxPlotModal(props) {
                 id="tumor_grade"
                 onChange={handleChange}
               />
-              <label className="custom-control-label" for="tumor_grade">
+              <label className="custom-control-label" htmlFor="tumor_grade">
                 Tumor Grade
               </label>
             </div>{" "}
@@ -113,7 +113,7 @@ export default function BoxPlotModal(props) {
                 id="tumor_stage"
                 onChange={handleChange}
               />
-              <label className="custom-control-label" for="tumor_stage">
+              <label className="custom-control-label" htmlFor="tumor_stage">
                 Tumor Stage
               </label>
             </div>

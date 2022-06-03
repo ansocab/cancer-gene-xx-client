@@ -1,35 +1,12 @@
-import { useRef, useContext } from "react";
+import { useRef } from "react";
 import { Form, Button } from "react-bootstrap";
-import { UserContext } from "../Helpers/user";
+import { connect } from "react-redux";
+import { register } from "../store/user/thunks";
 
-export default function RegisterForm({ callback }) {
+function RegisterForm({ register, callback }) {
   const nameValue = useRef();
   const emailValue = useRef();
   const passwordValue = useRef();
-  const { serverUrl, setUser } = useContext(UserContext);
-
-  const register = (data) => {
-    fetch(`${serverUrl}/register`, {
-      method: "POST",
-      body: JSON.stringify(data),
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      "Access-Control-Allow-Origin": serverUrl,
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        console.log(res);
-        if (res.success === true) {
-          setUser(res.user);
-          callback("registered");
-        } else {
-          console.log(res);
-        }
-      })
-      .catch((err) => console.log(err));
-  };
 
   const handleSubmission = (e) => {
     e.preventDefault();
@@ -81,3 +58,9 @@ export default function RegisterForm({ callback }) {
     </>
   );
 }
+
+const mapDispatchToProps = dispatch => ({
+  register: data => dispatch(register(data))
+});
+
+export default connect(null, mapDispatchToProps)(RegisterForm);

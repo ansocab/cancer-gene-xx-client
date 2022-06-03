@@ -145,7 +145,7 @@ export default function GdcWorkflowChoice(props) {
                       id={workflow}
                       onChange={handleChange}
                     />
-                    <label className="custom-control-label" for={workflow}>
+                    <label className="custom-control-label" htmlFor={workflow}>
                       {workflow}
                     </label>
                   </div>

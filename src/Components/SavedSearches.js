@@ -1,6 +1,5 @@
 import { useState, useEffect, useContext, useRef } from "react";
 import { useHistory } from "react-router-dom";
-import { UserContext } from "../Helpers/user";
 import Loading from "./Loading";
 import {
   Row,
@@ -12,6 +11,7 @@ import {
 } from "react-bootstrap";
 import { Trash } from "react-bootstrap-icons";
 import "../App.css";
+import { serverUrl } from "../Helpers/tempServerUrl";
 
 export default function SavedSearches() {
   const history = useHistory();
@@ -20,7 +20,6 @@ export default function SavedSearches() {
   const [loading, setLoading] = useState(true);
   const searchField = useRef();
   const searchTerm = useRef();
-  const { serverUrl } = useContext(UserContext);
 
   const getUserSearches = () => {
     fetch(`${serverUrl}/user/usersearchs`, {
@@ -83,7 +82,7 @@ export default function SavedSearches() {
 
   const getCheckboxList = (id, text) => {
     return (
-      <div className="custom-control custom-checkbox">
+      <div key={id} className="custom-control custom-checkbox">
         <input
           type="checkbox"
           className="custom-control-input"
@@ -226,7 +225,7 @@ export default function SavedSearches() {
               .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))
               .sort((a, b) => (a.pinned === b.pinned ? 0 : a.pinned ? -1 : 1))
               .map((search) => (
-                <div className="list-group-item list-group-item-action flex-column align-items-start mb-3 custom-list-item">
+                <div key={search._id} className="list-group-item list-group-item-action flex-column align-items-start mb-3 custom-list-item">
                   <div className="d-flex w-100 justify-content-between mb-3">
                     <Row className="d-flex">
                       <Col xs="7" md="auto" className="d-flex pl-md-0">

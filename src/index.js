@@ -5,18 +5,19 @@ import "bootswatch/dist/flatly/bootstrap.min.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
-import { UserContextProvider } from "./Helpers/user.js";
+import { Provider } from 'react-redux';
+import { configureStore } from "./store";
 import { SearchProvider } from "./Helpers/search.js";
 
 ReactDOM.render(
   <React.StrictMode>
-    <UserContextProvider>
+    <Provider store={configureStore()}>
       <SearchProvider>
         <BrowserRouter>
           <App />
         </BrowserRouter>
       </SearchProvider>
-    </UserContextProvider>
+    </Provider>
   </React.StrictMode>,
   document.getElementById("root")
 );

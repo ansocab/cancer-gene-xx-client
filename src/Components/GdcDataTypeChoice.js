@@ -110,7 +110,7 @@ export default function GdcDataTypeChoice(props) {
                     id={type}
                     onChange={handleChange}
                   />
-                  <label className="custom-control-label" for={type}>
+                  <label className="custom-control-label" htmlFor={type}>
                     {type}
                   </label>
                 </div>

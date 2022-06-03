@@ -1,36 +1,46 @@
-import { useState, useContext } from "react";
+import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
+import { connect } from 'react-redux';
 import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
-import { UserContext } from "../Helpers/user";
 import { Modal, OverlayTrigger, Popover, Button } from "react-bootstrap";
 import { PersonCircle } from "react-bootstrap-icons";
 import "../App.css";
+import { getUser, getRedirectUrl, getUserLoading } from "../store/user/selectors";
+import { logout, resetRedirect } from "../store/user/thunks";
 
-export default function ProfileManager() {
-  const [loginModalShow, setLoginModalShow] = useState(false);
-  const [registerModalShow, setRegisterModalShow] = useState(false);
+function ProfileManager(props) {
+  const { user, redirectUrl, isLoading, logout, resetRedirectUrl } = props;
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [showOverlay, setShowOverlay] = useState(false);
-  const { user, setUser, serverUrl } = useContext(UserContext);
   const history = useHistory();
+
+  useEffect(() => {
+    user && hideModals();
+  }, [user]);
+
+/*   useEffect(() => {
+    if (redirectUrl) {
+      history.push(redirectUrl)
+      resetRedirectUrl();
+    };
+  }, [redirectUrl]); */
+
+  const hideModals = () => {
+    setShowLoginModal(false);
+    setShowRegisterModal(false);
+  };
 
   const handleVisibility = (modal) => {
     switch (modal) {
-      case "loggedIn":
-        setLoginModalShow(false);
-        history.push("savedsearches");
-        break;
-      case "registered":
-        setRegisterModalShow(false);
-        history.push("savedsearches");
-        break;
       case "goToLogin":
-        setRegisterModalShow(false);
-        setLoginModalShow(true);
+        setShowRegisterModal(false);
+        setShowLoginModal(true);
         break;
       case "goToRegister":
-        setLoginModalShow(false);
-        setRegisterModalShow(true);
+        setShowLoginModal(false);
+        setShowRegisterModal(true);
         break;
       default:
         break;
@@ -39,24 +49,7 @@ export default function ProfileManager() {
 
   const handleLogout = () => {
     setShowOverlay(false);
-    fetch(`${serverUrl}/logout`, {
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      "Access-Control-Allow-Origin": serverUrl,
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        console.log(res);
-        if (res.success === true) {
-          setUser(null);
-          history.push(res.redirectUrl);
-        } else {
-          console.log(res);
-        }
-      })
-      .catch((err) => console.log(err));
+    logout();
   };
 
   return (
@@ -84,7 +77,7 @@ export default function ProfileManager() {
                       variant="primary"
                       onClick={() => {
                         setShowOverlay(false);
-                        setLoginModalShow(true);
+                        setShowLoginModal(true);
                       }}
                     >
                       Login
@@ -94,7 +87,7 @@ export default function ProfileManager() {
                       variant="primary"
                       onClick={() => {
                         setShowOverlay(false);
-                        setRegisterModalShow(true);
+                        setShowRegisterModal(true);
                       }}
                     >
                       Register
@@ -125,14 +118,14 @@ export default function ProfileManager() {
         aria-labelledby="contained-modal-title-vcenter"
         centered
         className="justify-content-md-center"
-        show={loginModalShow}
-        onHide={() => setLoginModalShow(false)}
+        show={showLoginModal}
+        onHide={() => setShowLoginModal(false)}
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">Login</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <LoginForm callback={handleVisibility} />
+          <LoginForm callback={handleVisibility}/>
         </Modal.Body>
       </Modal>
 
@@ -140,8 +133,8 @@ export default function ProfileManager() {
         aria-labelledby="contained-modal-title-vcenter"
         centered
         className="justify-content-md-center"
-        show={registerModalShow}
-        onHide={() => setRegisterModalShow(false)}
+        show={showRegisterModal}
+        onHide={() => setShowRegisterModal(false)}
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">Register</Modal.Title>
@@ -153,3 +146,18 @@ export default function ProfileManager() {
     </>
   );
 }
+
+const mapStateToProps = state => ({
+  user: getUser(state),
+  redirectUrl: getRedirectUrl(state),
+  isLoading: getUserLoading(state)
+});
+
+const mapDispatchToProps = dispatch => ({
+  //login: data => dispatch(login(data)),
+  //register: data => dispatch(register(data)),
+  logout: data => dispatch(logout(data)),
+  resetRedirectUrl: () => dispatch(resetRedirect())
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileManager);

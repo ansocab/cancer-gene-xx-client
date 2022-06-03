@@ -1,5 +1,6 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Switch, Route } from "react-router-dom";
+import { connect } from "react-redux";
 import { SearchContext } from "./Helpers/search";
 import EnsgSearch from "./Components/EnsgSearch";
 import GdcProjectChoice from "./Components/GdcProjectChoice";
@@ -12,9 +13,15 @@ import DataFetch from "./Components/DataFetch";
 import { Container } from "react-bootstrap";
 import "bootswatch/dist/flatly/bootstrap.min.css";
 import "./App.css";
+import { getUser } from "./store/user/selectors";
+import { loadUser } from "./store/user/thunks";
 
-function App() {
+function App({ user, loadUser }) {
   const { searchSummary, startDataFetch } = useContext(SearchContext);
+
+  useEffect(() => {
+    loadUser();
+  }, []);
 
   return (
     <div className="App">
@@ -46,4 +53,12 @@ function App() {
   );
 }
 
-export default App;
+const mapStateToProps = state => ({
+  user: getUser(state)
+});
+
+const mapDispatchToProps = dispatch => ({
+  loadUser: () => dispatch(loadUser())
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

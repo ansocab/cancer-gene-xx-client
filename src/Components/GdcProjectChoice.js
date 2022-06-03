@@ -90,7 +90,7 @@ export default function GdcProjectChoice() {
                     />
                     <label
                       className="custom-control-label"
-                      for={project.node.project_id}
+                      htmlFor={project.node.project_id}
                     >
                       {project.node.name}
                     </label>

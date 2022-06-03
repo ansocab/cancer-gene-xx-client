@@ -1,19 +1,20 @@
 import React, { useState, useContext, useRef } from "react";
 import { useParams } from "react-router-dom";
+import { connect } from "react-redux";
 import { SearchContext } from "../Helpers/search";
-import { UserContext } from "../Helpers/user";
 import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
 import { Button, Modal, Form } from "react-bootstrap";
+import { getUser } from "../store/user/selectors";
+import { serverUrl } from "../Helpers/tempServerUrl";
 
-export default function SaveSearch({ enabled }) {
+function SaveSearch({ enabled, user }) {
   const [showSearchSaveModal, setShowSearchSaveModal] = useState(false);
   const [showLoginButtonModal, setShowLoginButtonModal] = useState(false);
   const [showLoginForm, setShowLoginForm] = useState(true);
   const [showFeedback, setShowFeedback] = useState(false);
   const [success, setSuccess] = useState(false);
   const { cancerData, searchSummary } = useContext(SearchContext);
-  const { user, serverUrl } = useContext(UserContext);
   const searchName = useRef();
   const { ensgNumber } = useParams();
 
@@ -181,3 +182,9 @@ export default function SaveSearch({ enabled }) {
     </>
   );
 }
+
+const mapStateToProps = state => ({
+  user: getUser(state)
+});
+
+export default connect(mapStateToProps)(SaveSearch);

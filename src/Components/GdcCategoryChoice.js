@@ -102,7 +102,7 @@ export default function GdcCategoryChoice(props) {
                     id={category}
                     onChange={handleChange}
                   />
-                  <label className="custom-control-label" for={category}>
+                  <label className="custom-control-label" htmlFor={category}>
                     {category}
                   </label>
                 </div>

@@ -1,37 +1,19 @@
-import { useRef, useContext } from "react";
+import { useRef } from "react";
 import { Form, Button } from "react-bootstrap";
-import { UserContext } from "../Helpers/user";
+import { connect } from "react-redux";
+import { login } from "../store/user/thunks";
 
-export default function LoginForm({ callback }) {
+function LoginForm({ login, callback }) {
   const emailValue = useRef();
   const passwordValue = useRef();
-  const { serverUrl, setUser } = useContext(UserContext);
-
-  const login = (mail, pw) => {
-    fetch(`${serverUrl}/login`, {
-      method: "POST",
-      body: JSON.stringify({ email: mail, password: pw }),
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      "Access-Control-Allow-Origin": serverUrl,
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.success === true) {
-          setUser(res.user);
-          callback("loggedIn");
-        } else {
-          console.log(res);
-        }
-      })
-      .catch((err) => console.log(err));
-  };
 
   const handleSubmission = (e) => {
     e.preventDefault();
-    login(emailValue.current.value, passwordValue.current.value);
+    const loginData = {
+      email: emailValue.current.value,
+      password: passwordValue.current.value
+    }
+    login(loginData);
   };
 
   return (
@@ -68,3 +50,9 @@ export default function LoginForm({ callback }) {
     </>
   );
 }
+
+const mapDispatchToProps = dispatch => ({
+  login: data => dispatch(login(data))
+});
+
+export default connect(null, mapDispatchToProps)(LoginForm);

@@ -1,19 +1,18 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Row, Col, Button } from "react-bootstrap";
 import { useParams } from "react-router-dom";
-import { UserContext } from "../Helpers/user";
 import { SearchContext } from "../Helpers/search";
 import CollapsableCard from "./CollapsableCard";
 import BoxPlot from "./BoxPlot";
 import BoxPlotModal from "./BoxPlotModal";
 import Loading from "./Loading";
 import "../App.css";
+import { serverUrl } from "../Helpers/tempServerUrl";
 
 export default function SavedSearchesDetail() {
   const { searchId } = useParams();
   const [currentSearch, setCurrentSearch] = useState({});
   const [cancerData, setCancerData] = useState([]);
-  const { serverUrl } = useContext(UserContext);
   const { showPlot } = useContext(SearchContext);
   const [boxPlotModalShow, setBoxPlotModalShow] = useState(false);
 

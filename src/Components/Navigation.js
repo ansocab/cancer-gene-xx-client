@@ -1,10 +1,10 @@
-import React, { useContext } from "react";
+import React from "react";
+import { connect } from 'react-redux';
 import ProfileManager from "./ProfileManager";
 import { Navbar, Nav } from "react-bootstrap";
-import { UserContext } from "../Helpers/user";
+import { getUser, getUserLoading } from "../store/user/selectors";
 
-export default function Navigation() {
-  const { user } = useContext(UserContext);
+function Navigation({ user, isLoading }) {
 
   return (
     <Navbar className="navbar-dark" bg="dark" expand="sm">
@@ -16,7 +16,7 @@ export default function Navigation() {
             New search
           </Nav.Link>
           <Nav.Link
-            className={`nav-link ${!user && "disabled"}`}
+            className={`nav-link ${!user && !isLoading && "disabled"}`}
             href="/savedsearches"
           >
             History
@@ -30,3 +30,10 @@ export default function Navigation() {
     </Navbar>
   );
 }
+
+const mapStateToProps = state => ({
+  user: getUser(state),
+  isLoading: getUserLoading(state)
+});
+
+export default connect(mapStateToProps)(Navigation);
